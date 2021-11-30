@@ -109,4 +109,4 @@ client.infos = new Enmap({ name: "infos", dataDir: "./databases/infos" });
     //Start the Bot
 client.login(config.token)
 
-console.log(process.env.token)
+console.log(settings.token)
