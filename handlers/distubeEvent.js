@@ -460,7 +460,21 @@ module.exports = (client) => {
         channel.send(`An error encountered: ${e}`).catch((e)=>console.log(e))
         console.error(e)
       })
-      .on(`empty`, channel => channel.send(`Voice channel is empty! Leaving the channel...`).catch((e)=>console.log(e)))
+      .on(`empty`, queue => {
+        var embed = new MessageEmbed()
+        .setColor(ee.color)
+        .setFooter(ee.footertext, ee.footericon)
+        .setTitle("⛔️ LEFT THE CHANNEL")
+        .setDescription(":headphones: **There are no more songs left**")
+        .setTimestamp()
+        queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+          currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
+            //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+          })
+        }).catch((e) => {
+          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+        })
+      })
       .on(`searchNoResult`, message => message.channel.send(`No result found!`).catch((e)=>console.log(e)))
       .on(`finishSong`, (queue, song) => {
         var embed = new MessageEmbed().setColor(ee.color)

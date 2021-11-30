@@ -80,11 +80,7 @@ client.distube = new DisTube(client, {
         },
         youtubeDL: true,
         updateYouTubeDL: true,
-        customFilters: filters,
-        plugins: [
-            new SpotifyPlugin(spotifyoptions),
-            new SoundCloudPlugin()
-        ]
+        customFilters: filters
     })
     //Define some Global Collections
 client.commands = new Discord.Collection();
