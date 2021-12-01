@@ -75,7 +75,6 @@ module.exports = {
                                             .addField(`🌀 Queue:`, `>>> \`${newQueue.songs.length} song(s)\`\n\`${newQueue.formattedDuration}\``, true)
                                             .addField(`🔊 Volume:`, `>>> \`${newQueue.volume} %\``, true)
                                             .addField(`♾ Loop:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\`Queue\`` : `\`Song\`` : ``}`, true)
-                                            .addField(`↪️ Autoplay:`, `>>> ${newQueue.autoplay ? `${client.allEmojis.check_mark}` : ``}`, true)
                                             .addField(`❔ Download Song:`, `>>> [\`Click here\`](${newTrack.streamURL})`, true)
                                             .addField(`❔ Filter${newQueue.filters.length > 0 ? "s": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
                                             .addField(`View${newTrack.views > 0 ? "s": ""}:`, `>>> \`${newTrack.views}\``, true)
