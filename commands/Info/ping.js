@@ -8,14 +8,14 @@ module.exports = {
     name: "ping", //the command name for the Slash Command
 
     category: "Info",
-    usage: "ping",
+    Kullanımı: "ping",
     aliases: ["latency"],
 
     description: "Botun ne kadar hızlı olduğu hakkında size bilgi verir", //the command description for Slash Command Overview
     cooldown: 1,
     memberpermissions: [], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-    requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-    alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
 
     run: async(client, message, args) => {
         try {
@@ -28,7 +28,7 @@ module.exports = {
                 channel
             } = member.voice;
             await message.reply({
-                    content: `Bot hızı sorgulanıyor...`,
+                    content: `Bot bağlantı hızı sorgulanıyor...`,
                     ephemeral: true
                 })
                 .then(newMsg => newMsg.edit({

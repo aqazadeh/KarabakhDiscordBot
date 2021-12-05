@@ -8,10 +8,10 @@ const settings = require("../../botconfig/settings.json");
 module.exports = {
         name: "addrelated", //the command name for the Slash Command
         category: "Music",
-        usage: "addrelated",
-        description: "Add a similar/related song to the current Song!", //the command description for Slash Command Overview
+        Kullanımı: "addrelated",
+        description: "Geçerli Şarkıya benzer/ilgili bir şarkı ekleyin!", //the command description for Slash Command Overview
         cooldown: 2,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+
         alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL
         run: async(client, message, args) => {
             try {
@@ -46,7 +46,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`Your Voice Channel is full, I can't join!`)
+                            .setTitle(`Ses Kanalın dolu. Giriş yapamıyorum`)
                         ],
                     });
                 if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
@@ -54,7 +54,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`I am already connected somewhere else`)
+                            .setTitle(`Baska kanalda şarkı çalıyorum yanıma gel`)
                         ],
                     });
                 }
@@ -67,13 +67,13 @@ module.exports = {
                         })
                         //update it without a response!
                     let thenewmsg = await message.reply({
-                        content: `🔍 Searching Related Song for... **${newQueue.songs[0].name}**`,
+                        content: `🔍İlgili Şarkı aranıyor... **${newQueue.songs[0].name}**`,
                     }).catch(e => {
                         console.log(e)
                     })
                     await newQueue.addRelatedSong();
                     await thenewmsg.edit({
-                        content: `👍 Added: **${newQueue.songs[newQueue.songs.length - 1].name}**`,
+                        content: `👍 Eklendi: **${newQueue.songs[newQueue.songs.length - 1].name}**`,
                     }).catch(e => {
                         console.log(e)
                     })

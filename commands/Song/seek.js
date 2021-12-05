@@ -11,12 +11,12 @@ const {
 module.exports = {
         name: "seek", //the command name for the Slash Command
         category: "Song",
-        usage: "seek <TimeInSec>",
+        Kullanımı: "seek <TimeInSec>",
         aliases: ["sek"],
-        description: "Jumps to a specific Position in the Song", //the command description for Slash Command Overview
+        description: "Şarkıda belirli bir Pozisyona atlar", //the command description for Slash Command Overview
         cooldown: 10,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
 
         run: async(client, message, args) => {
             try {
@@ -70,15 +70,15 @@ module.exports = {
                                 new MessageEmbed()
                                 .setColor(ee.wrongcolor)
                                 .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(` **Please add a Seek Number Position-Duration!**`)
-                                .setDescription(`**Usage:**\n> \`${client.settings.get(guild.id, "prefix")}seek <Duration_in_Sec>\``)
+                                .setTitle(` **Lütfen bir Arama Numarası Pozisyon Süresi ekleyin!**`)
+                                .setDescription(`**Kullanımı:**\n> \`${client.settings.get(guild.id, "prefix")}seek <Duration_in_Sec>\``)
                             ],
                         })
                     }
                     let seekNumber = Number(args[0])
                     if (seekNumber > newQueue.songs[0].duration || seekNumber < 0) return message.reply({
                         embeds: [
-                            new MessageEmbed().setColor(ee.wrongcolor).setTitle(` **The Seek Position must be between \`0\` and \`${newQueue.songs[0].duration}\`!**`)
+                            new MessageEmbed().setColor(ee.wrongcolor).setTitle(` **Arama Konumu, \`0\` ile \`${newQueue.songs[0].duration}\` arasında olmalıdır!**`)
                         ],
 
                     })
@@ -88,7 +88,7 @@ module.exports = {
                                 .setColor(ee.wrongcolor)
                                 .setFooter(ee.footertext, ee.footericon)
                                 .setTitle(` **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)
-                                .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
+                                .setDescription(`**DJ Yetkisi:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
                             ],
                         });
                     }

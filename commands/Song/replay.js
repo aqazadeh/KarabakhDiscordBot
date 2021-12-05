@@ -11,12 +11,12 @@ const {
 module.exports = {
         name: "replay", //the command name for the Slash Command
         category: "Song",
-        usage: "replay",
+        Kullanımı: "replay",
         aliases: ["restart"],
-        description: "Replays the current song!", //the command description for Slash Command Overview
+        description: "Geçerli şarkıyı tekrar çalar!", //the command description for Slash Command Overview
         cooldown: 10,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
             try {
                 //things u can directly access in an interaction!
@@ -70,7 +70,7 @@ module.exports = {
                                 .setColor(ee.wrongcolor)
                                 .setFooter(ee.footertext, ee.footericon)
                                 .setTitle(` **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)
-                                .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
+                                .setDescription(`**DJ Yetkisi:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
                             ],
                         });
                     }
@@ -79,7 +79,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.color)
                             .setTimestamp()
-                            .setTitle(`🔃 **Replaying the current Song!**`)
+                            .setTitle(`🔃 **Geçerli Şarkıyı tekrar çalmak!**`)
                             .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                         ]
                     })

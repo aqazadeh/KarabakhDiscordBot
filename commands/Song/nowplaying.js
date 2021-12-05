@@ -11,12 +11,12 @@ const {
 module.exports = {
         name: "nowplaying", //the command name for the Slash Command
         category: "Song",
-        usage: "nowplaying",
+        Kullanımı: "nowplaying",
         aliases: ["np", "current"],
-        description: "Shows the current Playing Song", //the command description for Slash Command Overview
+        description: "Geçerli Çalmakta olan Şarkıyı gösterir", //the command description for Slash Command Overview
         cooldown: 5,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
                 try {
                     //things u can directly access in an interaction!
@@ -70,18 +70,18 @@ module.exports = {
                                             new MessageEmbed().setColor(ee.color)
                                             .setTitle(newTrack.name)
                                             .setURL(newTrack.url)
-                                            .addField(`💡 Requested by:`, `>>> ${newTrack.user}`, true)
-                                            .addField(`⏱ Duration:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
-                                            .addField(`🌀 Queue:`, `>>> \`${newQueue.songs.length} song(s)\`\n\`${newQueue.formattedDuration}\``, true)
-                                            .addField(`🔊 Volume:`, `>>> \`${newQueue.volume} %\``, true)
-                                            .addField(`♾ Loop:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\`Queue\`` : `\`Song\`` : ``}`, true)
-                                            .addField(`❔ Download Song:`, `>>> [\`Click here\`](${newTrack.streamURL})`, true)
+                                            .addField(`💡 İsteyen:`, `>>> ${newTrack.user}`, true)
+                                            .addField(`⏱ Süre:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
+                                            .addField(`🌀 Kuyruk:`, `>>> \`${newQueue.songs.length} şarkı(lar)\`\n\`${newQueue.formattedDuration}\``, true)
+                                            .addField(`♾ Döngü:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\`Kuyruk\`` : `\`Şarkı\`` : ``}`, true)
+                                            .addField(`❔ Müziği indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
                                             .addField(`❔ Filter${newQueue.filters.length > 0 ? "s": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
-                                            .addField(`View${newTrack.views > 0 ? "s": ""}:`, `>>> \`${newTrack.views}\``, true)
-                                            .addField(`:thumbsup: Like${newTrack.likes > 0 ? "s": ""}:`, `>>> \`${newTrack.likes}\``, true)
-                                            .addField(`:thumbsdown: Dislike${newTrack.dislikes > 0 ? "s": ""}:`, `>>> \`${newTrack.dislikes}\``, true)
+                                            .addField(`Görüntulenme`, `>>> \`${newTrack.views}\``, true)
+                                            
+                                            .addField(`:thumbsup: Beğenenler:`, `>>> \`${newTrack.likes}\``, true)
+                                            .addField(`:thumbsdown: Beğenmeyenler:`, `>>> \`${newTrack.dislikes}\``, true)
                                             .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
-                                            .setFooter(`Played in: ${guild.name}`, guild.iconURL({
+                                            .setFooter(`Şarkı İsteyen: ${guild.name}`, guild.iconURL({
                                                 dynamic: true
                                             })).setTimestamp()
                                         ]

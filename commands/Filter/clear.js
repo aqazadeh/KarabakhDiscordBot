@@ -12,13 +12,13 @@ module.exports = {
     name: "clear", //the command name for the Slash Command
 
     category: "Filter",
-    usage: "clear",
+    Kullanımı: "clear",
     aliases: ["clearfilters", "clearf", "cfilters", "cfilter", "clearfilter"],
 
     description: "Tüm Filtreleri temizler", //the command description for Slash Command Overview
     cooldown: 5,
-    requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-    alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
     run: async(client, message, args) => {
         try {
             const {
@@ -59,7 +59,7 @@ module.exports = {
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
                             .setTitle(`**Sen bir DJ değilsin ve Şarkı İsteyen de değilsin!**`)
-                            .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
+                            .setDescription(`**DJ Yetkisi:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
                         ],
                     });
                 }

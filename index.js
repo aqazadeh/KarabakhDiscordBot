@@ -41,6 +41,9 @@ const client = new Discord.Client({
     }
 });
 
+client.points = new Enmap({ name: "points", dataDir: "./databases/points" });
+// const leveling = require("./ranking"); //load the leveling file
+// leveling(client);
 client.distube = new DisTube(client, {
     emitNewSongOnly: false,
     leaveOnEmpty: true,
@@ -49,7 +52,7 @@ client.distube = new DisTube(client, {
     savePreviousSongs: true,
     emitAddSongWhenCreatingQueue: false,
     searchSongs: 0,
-    youtubeCookie: config.youtubeCookie,
+    youtubeIdentityToken: config.youtubeApiKey,
     nsfw: true,
     emptyCooldown: 25,
     ytdlOptions: {
@@ -74,7 +77,6 @@ require('events').defaultMaxListeners = 100;
 
 client.settings = new Enmap({ name: "settings", dataDir: "./databases/settings" });
 client.infos = new Enmap({ name: "infos", dataDir: "./databases/infos" });
-
 
 ["events", "commands", settings.antiCrash ? "antiCrash" : null, "distubeEvent"]
 .filter(Boolean)

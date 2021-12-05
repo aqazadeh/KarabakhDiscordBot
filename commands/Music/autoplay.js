@@ -13,12 +13,12 @@ module.exports = {
 
         category: "Music",
         aliases: ["ap"],
-        usage: "autoplay",
+        Kullanımı: "autoplay",
 
-        description: "Toggles Autoplay", //the command description for Slash Command Overview
+        description: "Otomatik oynatma", //the command description for Slash Command Overview
         cooldown: 5,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
                 try {
                     //things u can directly access in an interaction!
@@ -70,7 +70,7 @@ module.exports = {
                                     .setColor(ee.wrongcolor)
                                     .setFooter(ee.footertext, ee.footericon)
                                     .setTitle(` **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)
-                                    .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
+                                    .setDescription(`**DJ Yetkileri:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
                                 ],
                             });
                         }
@@ -79,7 +79,7 @@ module.exports = {
                                     embeds: [new MessageEmbed()
                                             .setColor(ee.color)
                                             .setTimestamp()
-                                            .setTitle(`**${newQueue.autoplay ? `Enabled` :` Disabled`} Autoplay!**`)
+                                            .setTitle(`**Otomatik Oyntma${newQueue.autoplay ? `Açık` :` Kapalı`}!**`)
 					  .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
 				})
 			} catch (e) {

@@ -66,7 +66,7 @@ module.exports = (client) => {
                                                     .setColor(ee.wrongcolor)
                                                     .setFooter(ee.footertext, ee.footericon)
                                                     .setTitle(` **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)
-                                                    .setDescription(`**DJ-ROLES:**\n${check_if_dj(client, i.member, client.distube.getQueue(i.guild.id).songs[0])}`)
+                                                    .setDescription(`**DJ Yetkisi:**\n${check_if_dj(client, i.member, client.distube.getQueue(i.guild.id).songs[0])}`)
                                                 ],
                                                 ephemeral: true
                                             });
@@ -83,7 +83,7 @@ module.exports = (client) => {
                                                 //if the member is not in a channel, return
                                             if (!channel)
                                                 return i.reply({
-                                                        content: ` **Please join a Voice Channel first!**`,
+                                                        content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                                                         ephemeral: true
                                                     })
                                                     //get the player instance
@@ -91,14 +91,14 @@ module.exports = (client) => {
                                             //if no player available return aka not playing anything
                                             if (!queue || !newQueue.songs || newQueue.songs.length == 0) {
                                                 return i.reply({
-                                                    content: ` Nothing Playing yet`,
+                                                    content: ` Henüz Oynanan Bir Şey Yok`,
                                                     ephemeral: true
                                                 })
                                             }
                                             //if not in the same channel as the player, return Error
                                             if (channel.id !== newQueue.voiceChannel.id)
                                                 return i.reply({
-                                                        content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                                                        content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                                                         ephemeral: true
                                                     })
                                                     //if ther is nothing more to skip then stop music and leave the Channel
@@ -108,8 +108,7 @@ module.exports = (client) => {
                                                     embeds: [new MessageEmbed()
                                                         .setColor(ee.color)
                                                         .setTimestamp()
-                                                        .setTitle(`⏹ **Stopped playing and left the Channel**`)
-                                                        .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+                                                        .setTitle(`⏹ **Oynatmayı bıraktı ve Kanaldan ayrıldı**`)
                                                     ]
                                                 })
                                                 clearInterval(songEditInterval);
@@ -123,7 +122,7 @@ module.exports = (client) => {
                                                 embeds: [new MessageEmbed()
                                                     .setColor(ee.color)
                                                     .setTimestamp()
-                                                    .setTitle(`⏭ **Skipped to the next Song!**`)
+                                                    .setTitle(`⏭ **Bir sonraki Şarkıya atlandı!**`)
                                                     .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                                                 ]
                                             })
@@ -136,14 +135,14 @@ module.exports = (client) => {
                                                 //if the member is not in a channel, return
                                             if (!channel)
                                                 return i.reply({
-                                                    content: ` **Please join a Voice Channel first!**`,
+                                                    content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                                                     ephemeral: true
                                                 })
 
                                             //if not in the same channel as the player, return Error
                                             if (channel.id !== newQueue.voiceChannel.id)
                                                 return i.reply({
-                                                        content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                                                        content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                                                         ephemeral: true
                                                     })
                                                     //stop the track
@@ -167,13 +166,13 @@ module.exports = (client) => {
                                                 //if the member is not in a channel, return
                                             if (!channel)
                                                 return i.reply({
-                                                        content: ` **Please join a Voice Channel first!**`,
+                                                        content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                                                         ephemeral: true
                                                     })
                                                     //if not in the same channel as the player, return Error
                                             if (channel.id !== newQueue.voiceChannel.id)
                                                 return i.reply({
-                                                    content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                                                    content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                                                     ephemeral: true
                                                 })
                                             if (newQueue.playing) {
@@ -186,7 +185,7 @@ module.exports = (client) => {
                                                     embeds: [new MessageEmbed()
                                                         .setColor(ee.color)
                                                         .setTimestamp()
-                                                        .setTitle(`⏸ **Paused!**`)
+                                                        .setTitle(`⏸ **Duraklatıldı!**`)
                                                         .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                                                     ]
                                                 })
@@ -201,7 +200,7 @@ module.exports = (client) => {
                                                     embeds: [new MessageEmbed()
                                                         .setColor(ee.color)
                                                         .setTimestamp()
-                                                        .setTitle(`▶️ **Resumed!**`)
+                                                        .setTitle(`▶️ **Devam ettirildi!**`)
                                                         .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                                                     ]
                                                 })
@@ -215,13 +214,13 @@ module.exports = (client) => {
                                                 //if the member is not in a channel, return
                                             if (!channel)
                                                 return i.reply({
-                                                        content: ` **Please join a Voice Channel first!**`,
+                                                        content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                                                         ephemeral: true
                                                     })
                                                     //if not in the same channel as the player, return Error
                                             if (channel.id !== newQueue.voiceChannel.id)
                                                 return i.reply({
-                                                        content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                                                        content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                                                         ephemeral: true
                                                     })
                                                     //pause the player
@@ -242,7 +241,7 @@ module.exports = (client) => {
                                                         embeds: [new MessageEmbed()
                                                                 .setColor(ee.color)
                                                                 .setTimestamp()
-                                                                .setTitle(`${newQueue.autoplay ? `**Enabled Autoplay**`: ` **Disabled Autoplay**`}`)
+                                                                .setTitle(`${newQueue.autoplay ? `**Otomatik Oynatma Etkin**`: ` **Otomatik Oynatma Kaplı**`}`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
                 })
             }
@@ -254,13 +253,13 @@ module.exports = (client) => {
               //if the member is not in a channel, return
               if (!channel)
                 return i.reply({
-                  content: ` **Please join a Voice Channel first!**`,
+                  content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                   ephemeral: true
                 })
               //if not in the same channel as the player, return Error
               if (channel.id !== newQueue.voiceChannel.id)
                 return i.reply({
-                  content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                  content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                   ephemeral: true
                 })
               //pause the player
@@ -270,7 +269,7 @@ module.exports = (client) => {
                 embeds: [new MessageEmbed()
                   .setColor(ee.color)
                   .setTimestamp()
-                  .setTitle(`🔀 **Shuffled ${newQueue.songs.length} Songs!**`)
+                  .setTitle(`🔀 **${newQueue.songs.length} Şarkı Karıştırıldı!**`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
               })
             }
@@ -282,13 +281,13 @@ module.exports = (client) => {
               //if the member is not in a channel, return
               if (!channel)
                 return i.reply({
-                  content: ` **Please join a Voice Channel first!**`,
+                  content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                   ephemeral: true
                 })
               //if not in the same channel as the player, return Error
               if (channel.id !== newQueue.voiceChannel.id)
                 return i.reply({
-                  content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                  content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                   ephemeral: true
                 })
               //Disable the Repeatmode
@@ -303,7 +302,7 @@ module.exports = (client) => {
                 embeds: [new MessageEmbed()
                   .setColor(ee.color)
                   .setTimestamp()
-                  .setTitle(`${newQueue.repeatMode == 1 ? `**Enabled Song-Loop**`: ` **Disabled Song-Loop**`}`)
+                  .setTitle(`${newQueue.repeatMode == 1 ? `**Şarkı Döngüsü Etkin**`: ` **Şarkı Döngüsü kapalı**`}`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
               })
               var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
@@ -319,13 +318,13 @@ module.exports = (client) => {
               //if the member is not in a channel, return
               if (!channel)
                 return i.reply({
-                  content: ` **Please join a Voice Channel first!**`,
+                  content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                   ephemeral: true
                 })
               //if not in the same channel as the player, return Error
               if (channel.id !== newQueue.voiceChannel.id)
                 return i.reply({
-                  content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                  content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                   ephemeral: true
                 })
               //Disable the Repeatmode
@@ -340,7 +339,7 @@ module.exports = (client) => {
                 embeds: [new MessageEmbed()
                   .setColor(ee.color)
                   .setTimestamp()
-                  .setTitle(`${newQueue.repeatMode == 2 ? `**Enabled Queue-Loop**`: ` **Disabled Queue-Loop**`}`)
+                  .setTitle(`${newQueue.repeatMode == 2 ? `**Kuyruk Döngüsü Etkin **`: ` **Kuyruk Döngüsü Kapalı **`}`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
                 })
               var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
@@ -356,13 +355,13 @@ module.exports = (client) => {
               //if the member is not in a channel, return
               if (!channel)
                 return i.reply({
-                  content: ` **Please join a Voice Channel first!**`,
+                  content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                   ephemeral: true
                 })
               //if not in the same channel as the player, return Error
               if (channel.id !== newQueue.voiceChannel.id)
                 return i.reply({
-                  content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                  content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                   ephemeral: true
                 })
               let seektime = newQueue.currentTime + 10;
@@ -373,7 +372,7 @@ module.exports = (client) => {
                 embeds: [new MessageEmbed()
                   .setColor(ee.color)
                   .setTimestamp()
-                  .setTitle(`⏩ **Forwarded the song for \`10 Seconds\`!**`)
+                  .setTitle(`⏩ **Şarkıyı \`10 Saniye\` için iletti!**`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
               })
               var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
@@ -389,13 +388,13 @@ module.exports = (client) => {
               //if the member is not in a channel, return
               if (!channel)
                 return i.reply({
-                  content: ` **Please join a Voice Channel first!**`,
+                  content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                   ephemeral: true
                 })
               //if not in the same channel as the player, return Error
               if (channel.id !== newQueue.voiceChannel.id)
                 return i.reply({
-                  content: ` **Please join __my__ Voice Channel first! <#${channel.id}>**`,
+                  content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                   ephemeral: true
                 })
               let seektime = newQueue.currentTime - 10;
@@ -407,7 +406,7 @@ module.exports = (client) => {
                 embeds: [new MessageEmbed()
                   .setColor(ee.color)
                   .setTimestamp()
-                  .setTitle(`⏪ **Rewinded the song for \`10 Seconds\`!**`)
+                  .setTitle(`⏪ **Şarkıyı \`10 Saniye\` için geri aldı!**`)
                   .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
               })
               var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
@@ -429,10 +428,10 @@ module.exports = (client) => {
           .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
             dynamic: true
           }))
-          .setTitle(`**Song added to the Queue!**`)
-          .setDescription(`👍 Song: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
-          .addField(`⌛ **Estimated Time:**`, `\`${queue.songs.length - 1} song${queue.songs.length > 0 ? "s" : ""}\` - \`${(Math.floor((queue.duration - song.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
-          .addField(`🌀 **Queue Duration:**`, `\`${queue.formattedDuration}\``)
+          .setTitle(`**Şarkı Kuyruğa eklendi!**`)
+          .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
+          .addField(`⌛ **Tahmini süresi:**`, `\`${queue.songs.length - 1} Şarkı\` - \`${(Math.floor((queue.duration - song.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
+          .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
         ]
       }))
       .on(`addList`, (queue, playlist) => queue.textChannel.send({
@@ -443,29 +442,29 @@ module.exports = (client) => {
           .setFooter("💯" + playlist.user.tag, playlist.user.displayAvatarURL({
             dynamic: true
           }))
-          .setTitle(`**Playlist added to the Queue!**`)
-          .setDescription(`👍 Playlist: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Song${playlist.songs.length > 0 ? "s" : ""}\``)
-          .addField(`⌛ **Estimated Time:**`, `\`${queue.songs.length - - playlist.songs.length} song${queue.songs.length > 0 ? "s" : ""}\` - \`${(Math.floor((queue.duration - playlist.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
-          .addField(`🌀 **Queue Duration:**`, `\`${queue.formattedDuration}\``)
+          .setTitle(`**Oynatma listesi Kuyruğa eklendi!**`)
+          .setDescription(`👍 Oynatma listesi: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Song${playlist.songs.length > 0 ? "s" : ""}\``)
+          .addField(`⌛ **Tahmini süresi:**`, `\`Şarkı\` - \`${(Math.floor((queue.duration - playlist.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
+          .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
         ]
       }))
       // DisTubeOptions.searchSongs = true
       .on(`searchResult`, (message, result) => {
         let i = 0
-        message.channel.send(`**Choose an option from below**\n${result.map((song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join(`\n`)}\n*Enter anything else or wait 60 seconds to cancel*`)
+        message.channel.send(`**Aşağıdan bir seçenek belirleyin**\n${result.map((song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join(`\n`)}\n*Başka bir şey girin veya iptal etmek için 60 saniye bekleyin*`)
       })
       // DisTubeOptions.searchSongs = true
-      .on(`searchCancel`, message => message.channel.send(`Searching canceled`).catch((e)=>console.log(e)))
+      .on(`searchCancel`, message => message.channel.send(`Mesaj İptal edildi`).catch((e)=>console.log(e)))
       .on(`error`, (channel, e) => {
-        channel.send(`An error encountered: ${e}`).catch((e)=>console.log(e))
+        channel.send(`Bir hatayla karşılaşıldı: ${e}`).catch((e)=>console.log(e))
         console.error(e)
       })
       .on(`empty`, queue => {
         var embed = new MessageEmbed()
         .setColor(ee.color)
         .setFooter(ee.footertext, ee.footericon)
-        .setTitle("⛔️ LEFT THE CHANNEL")
-        .setDescription(":headphones: **There are no more songs left**")
+        .setTitle("⛔️ KANALDAN AYRILDI")
+        .setDescription(":headphones: **Başka şarkı kalmadı**")
         .setTimestamp()
         queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
           currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
@@ -475,12 +474,12 @@ module.exports = (client) => {
           //console.log(e.stack ? String(e.stack).grey : String(e).grey)
         })
       })
-      .on(`searchNoResult`, message => message.channel.send(`No result found!`).catch((e)=>console.log(e)))
+      .on(`searchNoResult`, message => message.channel.send(`Aradıgınız Şarkı Bulunamadı`).catch((e)=>console.log(e)))
       .on(`finishSong`, (queue, song) => {
         var embed = new MessageEmbed().setColor(ee.color)
         .setAuthor(`${song.name}`, "https://cdn.discordapp.com/attachments/883978730261860383/883978741892649000/847032838998196234.png", song.url)
         .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
-        .setFooter(`💯 ${song.user.tag}\n⛔️ SONG ENDED!`, song.user.displayAvatarURL({
+        .setFooter(`💯 ${song.user.tag}\n⛔️ Şarkı Bitti!`, song.user.displayAvatarURL({
           dynamic: true
         }));
         queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
@@ -495,8 +494,8 @@ module.exports = (client) => {
         queue.textChannel.send({
           embeds: [
             new MessageEmbed().setColor(ee.color).setFooter(ee.footertext, ee.footericon)
-            .setTitle("⛔️ LEFT THE CHANNEL")
-            .setDescription(":headphones: **There are no more songs left**")
+            .setTitle("⛔️ KANALDAN AYRILDI")
+            .setDescription(":headphones: **Başka şarkı kalmadı**")
             .setTimestamp()
           ]
         })
@@ -528,34 +527,34 @@ module.exports = (client) => {
     else djs.slice(0, 15).join(", ");
     if(!newTrack) return new MessageEmbed().setColor(ee.wrongcolor).setTitle("NO SONG FOUND?!?!")
     var embed = new MessageEmbed().setColor(ee.color)
-      .addField(`💡 Requested by:`, `>>> ${newTrack.user}`, true)
-      .addField(`⏱ Duration:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
-      .addField(`🌀 Queue:`, `>>> \`${newQueue.songs.length} song(s)\`\n\`${newQueue.formattedDuration}\``, true)
-      .addField(`🔊 Volume:`, `>>> \`${newQueue.volume} %\``, true)
-      .addField(`♾ Loop:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\` Queue\`` : `\`Song\`` : ``}`, true)
-      .addField(`❔ Download Song:`, `>>> [\`Click here\`](${newTrack.streamURL})`, true)
-      .addField(`❔ Filter${newQueue.filters.length > 0 ? "s": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
+      .addField(`💡 İsteyen`, `>>> ${newTrack.user}`, true)
+      .addField(`⏱ Süre:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
+      .addField(`🌀 Şarkı Kuyruğu:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
+      .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
+      .addField(`♾ Tekrarlama:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\` Kuyruk\`` : `\`Şarkı\`` : ``}`, true)
+      .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
+      .addField(`❔ Filtre${newQueue.filters.length > 0 ? "ler": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
 			.addField(`🎧 DJ-Role${client.settings.get(newQueue.id, "djroles").length > 1 ? "s": ""}:`, `>>> ${djs}`, client.settings.get(newQueue.id, "djroles").length > 1 ? false : true)
       .setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
       .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
       .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
         dynamic: true
       }));
-    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`).setLabel(`Skip`)
-    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`🏠`).setLabel(`Stop`)
-    let pause = new MessageButton().setStyle('SECONDARY').setCustomId('3').setEmoji('⏸').setLabel(`Pause`)
-    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('4').setEmoji('🔁').setLabel(`Autoplay`)
-    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('5').setEmoji('🔀').setLabel(`Shuffle`)
+    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`).setLabel(`Geç`)
+    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`🏠`).setLabel(`Dur`)
+    let pause = new MessageButton().setStyle('SECONDARY').setCustomId('3').setEmoji('⏸').setLabel(`Duraklat`)
+    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('4').setEmoji('🔁').setLabel(`Otomatik Oynatma`)
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('5').setEmoji('🔀').setLabel(`Rastgele oynat`)
     if (!newQueue.playing) {
-      pause = pause.setStyle('SUCCESS').setEmoji('▶️').setLabel(`Resume`)
+      pause = pause.setStyle('SUCCESS').setEmoji('▶️').setLabel(`Devam`)
     }
     if (newQueue.autoplay) {
       autoplay = autoplay.setStyle('SECONDARY')
     }
-    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('6').setEmoji(`🔁`).setLabel(`Song`)
-    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji(`🔂`).setLabel(`Queue`)
-    let forward = new MessageButton().setStyle('PRIMARY').setCustomId('8').setEmoji('⏩').setLabel(`+10 Sec`)
-    let rewind = new MessageButton().setStyle('PRIMARY').setCustomId('9').setEmoji('⏪').setLabel(`-10 Sec`)
+    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('6').setEmoji(`🔁`).setLabel(`Şarkı`)
+    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji(`🔂`).setLabel(`Şarkı Kuyruğu`)
+    let forward = new MessageButton().setStyle('PRIMARY').setCustomId('8').setEmoji('⏩').setLabel(`+10 Saniye`)
+    let rewind = new MessageButton().setStyle('PRIMARY').setCustomId('9').setEmoji('⏪').setLabel(`-10 Saniye`)
     if (newQueue.repeatMode === 0) {
       songloop = songloop.setStyle('SUCCESS')
       queueloop = queueloop.setStyle('SUCCESS')

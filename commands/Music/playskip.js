@@ -13,12 +13,12 @@ module.exports = {
 
         category: "Music",
         aliases: ["ps"],
-        usage: "playskip <Search/link>",
+        Kullanımı: "playskip <Search/link>",
 
         description: "Plays a Song/Playlist and skips!", //the command description for Slash Command Overview
         cooldown: 2,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
             try {
                 //things u can directly access in an interaction!
@@ -52,7 +52,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`Your Voice Channel is full, I can't join!`)
+                            .setTitle(`Ses Kanalın dolu. Giriş yapamıyorum`)
                         ],
                     });
                 if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
@@ -60,7 +60,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`I am already connected somewhere else`)
+                            .setTitle(`Baska kanalda şarkı çalıyorum yanıma gel`)
                         ],
                     });
                 }
@@ -70,7 +70,7 @@ module.exports = {
                             .setColor(ee.wrongcolor)
                             .setFooter(ee.footertext, ee.footericon)
                             .setTitle(` **Please add a Search Query!**`)
-                            .setDescription(`**Usage:**\n> \`${client.settings.get(message.guild.id, "prefix")}playskip <Search/Link>\``)
+                            .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}playskip <Search/Link>\``)
                         ],
                     });
                 }
@@ -96,7 +96,7 @@ module.exports = {
                                     .setColor(ee.wrongcolor)
                                     .setFooter(ee.footertext, ee.footericon)
                                     .setTitle(` **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)
-                                    .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, queue.songs[0])}`)
+                                    .setDescription(`**DJ Yetkisi:**\n> ${check_if_dj(client, member, queue.songs[0])}`)
                                 ],
                             });
                         }
@@ -104,7 +104,7 @@ module.exports = {
                     await client.distube.playVoiceChannel(channel, Text, options)
                         //Edit the reply
                     newmsg.edit({
-                        content: `${queue?.songs?.length > 0 ? "⏭ Skipping to" : "🎶 Now Playing"}: \`\`\`css\n${Text}\n\`\`\``,
+                        content: `${queue?.songs?.length > 0 ? "⏭ Skipping to" : "🎶 Simdi çalınıyor"}: \`\`\`css\n${Text}\n\`\`\``,
                     }).catch(e => {
                         console.log(e)
                     })

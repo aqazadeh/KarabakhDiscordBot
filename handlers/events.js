@@ -19,13 +19,13 @@ module.exports = async(client) => {
             }
         }
         await ["client", "guild"].forEach(e => load_dir(e));
-        console.log(`${amount} Events Loaded`.brightGreen);
+        console.log(`${amount} Events yüklendi`.brightGreen);
         try {
             const stringlength2 = 69;
             console.log("\n")
             console.log(`     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓`.bold.yellow)
             console.log(`     ┃ `.bold.yellow + " ".repeat(-1 + stringlength2 - ` ┃ `.length) + "┃".bold.yellow)
-            console.log(`     ┃ `.bold.yellow + `Logging into the BOT...`.bold.yellow + " ".repeat(-1 + stringlength2 - ` ┃ `.length - `Logging into the BOT...`.length) + "┃".bold.yellow)
+            console.log(`     ┃ `.bold.yellow + `Bot Hazırlanıyor...`.bold.yellow + " ".repeat(3 + stringlength2 - ` ┃ `.length - `Bota Giriş Yapılıyor...`.length) + "┃".bold.yellow)
             console.log(`     ┃ `.bold.yellow + " ".repeat(-1 + stringlength2 - ` ┃ `.length) + "┃".bold.yellow)
             console.log(`     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`.bold.yellow)
         } catch {

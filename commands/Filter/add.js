@@ -14,13 +14,13 @@ module.exports = {
         name: "addfilter", //the command name for the Slash Command
 
         category: "Filter",
-        usage: "addfilter <Filter1 Filter2>",
+        Kullanımı: "addfilter <Filter1 Filter2>",
         aliases: ["addfilters", "add", "addf"],
 
         description: "Filtrelere Filtre Ekle", //the command description for Slash Command Overview
         cooldown: 5,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
                 try {
                     const {
@@ -59,7 +59,7 @@ module.exports = {
                                     .setColor(ee.wrongcolor)
                                     .setFooter(ee.footertext, ee.footericon)
                                     .setTitle(`**Sen bir DJ değilsin ve Şarkı İsteyen de değilsin!**`)
-                                    .setDescription(`**DJ-ROLES:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
+                                    .setDescription(`**DJ Yetkisi:**\n> ${check_if_dj(client, member, newQueue.songs[0])}`)
                                 ],
                             });
                         }
@@ -90,7 +90,7 @@ module.exports = {
                                     .setColor(ee.wrongcolor)
                                     .setFooter(ee.footertext, ee.footericon)
                                     .setTitle(` **Hiç Filtre eklemediniz. Filtre yok**`)
-                                    .addField("**Tüm  __current__ Filtreler:**", newQueue.filters.map(f => `\`${f}\``).join(", "))
+                                    .addField("**Tüm  __geçerli__ Filtreler:**", newQueue.filters.map(f => `\`${f}\``).join(", "))
                                 ],
                             })
                         }

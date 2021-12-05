@@ -8,14 +8,14 @@ module.exports = {
         name: "help", //the command name for execution & for helpcmd [OPTIONAL]
 
         category: "Info",
-        usage: "help [cmdname]",
+        Kullanımı: "help [cmdname]",
         aliases: ["h", "help", "y", "yardım"],
 
         cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
         description: "Tüm Komutları döndürür", //the command description for helpcmd [OPTIONAL]
         memberpermissions: [], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
                 try {
                     let prefix = client.settings.get(message.guild.id, "prefix")
@@ -33,8 +33,8 @@ module.exports = {
                         if (cmd.aliases) embed.addField("**Takma adlar**", `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
                     if (cmd.cooldown) embed.addField("**Bekleme Süresi**", `\`${cmd.cooldown} saniye\``);
                     else embed.addField("**Bekleme Süresi**", `\`${settings.default_cooldown_in_sec} saniye\``);
-                    if (cmd.usage) {
-                      embed.addField("**Kullanımı**", `\`${prefix}${cmd.usage}\``);
+                    if (cmd.Kullanımı) {
+                      embed.addField("**Kullanımı**", `\`${prefix}${cmd.Kullanımı}\``);
                       embed.setFooter("Sözdizimi: <> = gerekli, [] = isteğe bağlı");
                     }
                     return message.reply({

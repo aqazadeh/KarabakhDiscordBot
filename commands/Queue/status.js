@@ -13,12 +13,12 @@ module.exports = {
 
         category: "Queue",
         aliases: ["stats"],
-        usage: "status",
+        Kullanımı: "status",
 
-        description: "Shows the Queue Status", //the command description for Slash Command Overview
+        description: "Kuyruktakı şarkıları gösterir", //the command description for Slash Command Overview
         cooldown: 10,
-        requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-        alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+
+
         run: async(client, message, args) => {
                 try {
                     //things u can directly access in an interaction!
@@ -68,18 +68,19 @@ module.exports = {
                         var djs = client.settings.get(newQueue.id, `djroles`);
                         if (!djs || !Array.isArray(djs)) djs = [];
                         else djs = djs.map(r => `<@&${r}>`);
-                        if (djs.length == 0) djs = "`not setup`";
+                        if (djs.length == 0) djs = "`atanmadi`";
                         else djs.slice(0, 15).join(", ");
                         let newTrack = newQueue.songs[0];
-                        let embed = new MessageEmbed().setColor(ee.color)
-                            .addField(`💡 Requested by:`, `>>> ${newTrack.user}`, true)
-                            .addField(`⏱ Duration:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
-                            .addField(`🌀 Queue:`, `>>> \`${newQueue.songs.length} song(s)\`\n\`${newQueue.formattedDuration}\``, true)
-                            .addField(`🔊 Volume:`, `>>> \`${newQueue.volume} %\``, true)
-                            .addField(`♾ Loop:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\`Queue\`` : `\`Song\`` : ``}`, true)
-                            .addField(`❔ Download Song:`, `>>> [\`Click here\`](${newTrack.streamURL})`, true)
-                            .addField(`❔ Filter${newQueue.filters.length > 0 ? "s": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
-                            .addField(`🎧 DJ-Role${djs.length > 1 ? "s": ""}:`, `>>> ${djs}`, djs.length > 1 ? false : true)
+                        let embed = new MessageEmbed()
+                            .setColor(ee.color)
+                            .addField(`💡 İsteyen:`, `>>> ${newTrack.user}`, true)
+                            .addField(`⏱ Süre:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
+                            .addField(`🌀 Kuyruk:`, `>>> \`${newQueue.songs.length} şarkı(lar)\`\n\`${newQueue.formattedDuration}\``, true)
+                            .addField(`🔊 Ses yüzdesi:`, `>>> \`${newQueue.volume} %\``, true)
+                            .addField(`♾ Döngü:`, `>>> ${newQueue.repeatMode ? newQueue.repeatMode === 2 ? `\`Kuyruk\`` : `\`Şarkı\`` : ``}`, true)
+                            .addField(`❔ Müziği indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
+                            .addField(`❔ Filtre${newQueue.filters.length > 0 ? "ler": ""}:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 1 ? false : true)
+                            .addField(`🎧 DJ Yetkisi${djs.length > 1 ? "s": ""}:`, `>>> ${djs}`, djs.length > 1 ? false : true)
                             .setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
                             .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
                             .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
@@ -104,12 +105,3 @@ module.exports = {
 		}
 	}
 }
-/**
- * @INFO
- * Bot Coded by Tomato#6966 | https://github.com/Tomato6966/Discord-Js-Handler-Template
- * @INFO
- * Work for Milrato Development | https://milrato.eu
- * @INFO
- * Please mention Him / Milrato Development, when using this Code!
- * @INFO
- */

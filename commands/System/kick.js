@@ -8,12 +8,12 @@ const settings = require("../../botconfig/settings.json");
 module.exports = {
     name: "kick", //the command name for the Slash Command
     category: "System",
-    usage: "ban",
-    aliases: ["ban"],
+    Kullanımı: "ban",
+    aliases: ["kick"],
     description: "Bir kullaniciyi Sunucudan Atar", //the command description for Slash Command Overview
     cooldown: 1,
-    requiredroles: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-    alloweduserids: [], //Only allow specific Users to execute a Command [OPTIONAL]
+    memberpermissions: ["KICK_MEMBERS"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
