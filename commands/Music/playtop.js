@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Music",
     aliases: ["pt"],
-    Kullanımı: "playtop <Search/link>",
+    usage: "playtop <Search/link>",
 
     description: "Bir Şarkı/Çalma Listesi çalar ve onu En Başa ekler!", //the command description for Slash Command Overview
     cooldown: 2,

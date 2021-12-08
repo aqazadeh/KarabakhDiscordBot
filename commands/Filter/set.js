@@ -13,7 +13,7 @@ module.exports = {
     name: "setfilter", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "setfilter <Filter1 Filter2>",
+    usage: "setfilter <Filter1 Filter2>",
     aliases: ["setfilters", "set", "setf"],
 
     description: "Tüm Filtreleri ayarlar (üzerine yazar)", //the command description for Slash Command Overview

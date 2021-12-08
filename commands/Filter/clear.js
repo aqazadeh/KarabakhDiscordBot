@@ -12,7 +12,7 @@ module.exports = {
     name: "clear", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "clear",
+    usage: "clear",
     aliases: ["clearfilters", "clearf", "cfilters", "cfilter", "clearfilter"],
 
     description: "Tüm Filtreleri temizler", //the command description for Slash Command Overview

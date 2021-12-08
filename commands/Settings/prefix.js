@@ -8,10 +8,10 @@ module.exports = {
     name: "prefix", //the command name for execution & for helpcmd [OPTIONAL]
     category: "Settings",
     aliases: ["setprefix"],
-    Kullanımı: "prefix <newPrefix>",
+    usage: "prefix <newPrefix>",
     cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
     description: "Bot PREFİX Değiştirir!", //the command description for helpcmd [OPTIONAL]
-    memberpermissions: ["MANAGE_GUILD "], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
+    memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
 
 
 

@@ -11,7 +11,7 @@ const {
 module.exports = {
     name: "addend", //the command name for the Slash Command
     category: "Song",
-    Kullanımı: "addend",
+    usage: "addend",
     aliases: ["adde"],
     description: "Adds this Song back to the end of the Queue!", //the command description for Slash Command Overview
     cooldown: 15,

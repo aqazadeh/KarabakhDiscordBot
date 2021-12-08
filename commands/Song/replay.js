@@ -11,7 +11,7 @@ const {
 module.exports = {
         name: "replay", //the command name for the Slash Command
         category: "Song",
-        Kullanımı: "replay",
+        usage: "replay",
         aliases: ["restart"],
         description: "Geçerli şarkıyı tekrar çalar!", //the command description for Slash Command Overview
         cooldown: 10,

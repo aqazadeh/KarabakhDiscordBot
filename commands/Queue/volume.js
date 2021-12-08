@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["vol"],
-    Kullanımı: "volume <newVolume>",
+    usage: "volume <newVolume>",
 
     description: "Müziğin Sesini ayarlar", //the command description for Slash Command Overview
     cooldown: 10,

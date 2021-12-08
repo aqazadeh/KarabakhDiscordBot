@@ -5,8 +5,8 @@ const ee = require("../../botconfig/embed.json");
 module.exports = {
     name: "leaderboard", //the command name for the Slash Command
     category: "Ranking",
-    Kullanımı: "leaderboard",
-    aliases: ["leaderboard", "test"],
+    usage: "leaderboard",
+    aliases: ["leaderboard"],
     description: "Sunucu Siralamasini Goruntuler", //the command description for Slash Command Overview
     cooldown: 1,
 

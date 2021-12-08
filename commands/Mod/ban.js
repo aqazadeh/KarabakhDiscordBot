@@ -5,8 +5,8 @@ const ee = require("../../botconfig/embed.json");
 
 module.exports = {
     name: "ban", //the command name for the Slash Command
-    category: "System",
-    Kullanımı: "ban",
+    category: "Mod",
+    usage: "ban",
     aliases: ["ban"],
     description: "Bir kullaniciyi Sunucudan Engeller", //the command description for Slash Command Overview
     cooldown: 1,
@@ -34,7 +34,7 @@ module.exports = {
                         .setTitle(` **Kullanıcı Sunucudan Engellendi**`)
                     ],
                 });
-            }).catch(() => {
+            }).catch(e => {
                 return message.reply({
                     embeds: [new MessageEmbed()
                         .setColor(ee.color)

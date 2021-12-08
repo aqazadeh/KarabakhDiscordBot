@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Music",
     aliases: ["s"],
-    Kullanımı: "skip",
+    usage: "skip",
 
     description: "Geçerli Parçayı Atlar", //the command description for Slash Command Overview
     cooldown: 5,

@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["repeat", "repeatmode", "l"],
-    Kullanımı: "loop <song/queue/off>",
+    usage: "loop <song/queue/off>",
 
     description: "Şarkı/Kuyruk Döngüsünü Etkinleştir/Devre Dışı Bırak", //the command description for Slash Command Overview
     cooldown: 5,

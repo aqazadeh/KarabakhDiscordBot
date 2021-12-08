@@ -12,7 +12,7 @@ module.exports = {
     name: "previous", //the command name for the Slash Command
     category: "Queue",
     aliases: ["pre"],
-    Kullanımı: "previous",
+    usage: "previous",
 
     description: "Önceki Şarkıyı çalar!", //the command description for Slash Command Overview
     cooldown: 10,

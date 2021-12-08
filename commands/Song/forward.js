@@ -11,7 +11,7 @@ const {
 module.exports = {
     name: "forward", //the command name for the Slash Command
     category: "Song",
-    Kullanımı: "forward <TimeinSec>",
+    usage: "forward <TimeinSec>",
     aliases: ["fwd"],
     description: "X Saniye için İleri Git", //the command description for Slash Command Overview
     cooldown: 10,

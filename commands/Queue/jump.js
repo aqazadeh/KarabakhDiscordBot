@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["jump", "skipto"],
-    Kullanımı: "jump <SongPosition>",
+    usage: "jump <SongPosition>",
 
     description: "Sıradaki belirli bir Şarkıya atlar", //the command description for Slash Command Overview
     cooldown: 10,

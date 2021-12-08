@@ -14,7 +14,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["list", "queue", "queuelist"],
-    Kullanımı: "list",
+    usage: "list",
 
     description: "Geçerli Sırayı listeler", //the command description for Slash Command Overview
     cooldown: 10,

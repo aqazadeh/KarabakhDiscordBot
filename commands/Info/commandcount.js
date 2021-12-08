@@ -7,7 +7,7 @@ const settings = require("../../botconfig/settings.json");
 module.exports = {
     name: "commandcount", //the command name for execution & for helpcmd [OPTIONAL]
     category: "Info",
-    Kullanımı: "commandcount",
+    usage: "commandcount",
     aliases: ["cmds", "commandc", "count", "cmdcount"],
     cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
     description: "Kategorilerdeki Komutların Miktarını Gösterir", //the command description for helpcmd [OPTIONAL]

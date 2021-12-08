@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["delete", "del", "rem"],
-    Kullanımı: "remove <What_song> [Amount]",
+    usage: "remove <What_song> [Amount]",
 
     description: "Bir Şarkıyı kaldırır", //the command description for Slash Command Overview
     cooldown: 10,

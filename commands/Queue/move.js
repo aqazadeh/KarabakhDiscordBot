@@ -12,7 +12,7 @@ module.exports = {
     name: "move", //the command name for the Slash Command
 
     category: "Queue",
-    Kullanımı: "move <WhatSong> <ToWhere>",
+    usage: "move <WhatSong> <ToWhere>",
 
     description: "Bir Şarkıyı başka bir sıraya taşır", //the command description for Slash Command Overview
     cooldown: 10,

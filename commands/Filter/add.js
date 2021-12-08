@@ -12,9 +12,8 @@ const {
 
 module.exports = {
         name: "addfilter", //the command name for the Slash Command
-
         category: "Filter",
-        Kullanımı: "addfilter <Filter1 Filter2>",
+        usage: "addfilter <Filter1 Filter2>",
         aliases: ["addfilters", "add", "addf"],
 
         description: "Filtrelere Filtre Ekle", //the command description for Slash Command Overview
@@ -23,17 +22,13 @@ module.exports = {
 
         run: async(client, message, args) => {
                 try {
-                    const {
-                        member,
-                        guildId,
-                        guild
-                    } = message;
-                    const {
-                        channel
-                    } = member.voice;
+                    const { member, guildId, guild } = message;
+                    const { channel } = member.voice;
                     if (!channel) return message.reply({
                         embeds: [
-                            new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen önce ses kanalına giriş yapın**`)
+                            new MessageEmbed()
+                            .setColor(ee.wrongcolor)
+                            .setTitle(`**Lütfen önce ses kanalına giriş yapın**`)
                         ],
                     })
                     if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {

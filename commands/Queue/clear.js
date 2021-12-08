@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["clearqueue", "clearq", "clearqu"],
-    Kullanımı: "clear",
+    usage: "clear",
 
     description: "Sırayı Temizler", //the command description for Slash Command Overview
     cooldown: 10,

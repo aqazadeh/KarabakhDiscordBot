@@ -10,7 +10,7 @@ module.exports = {
 
     category: "Music",
     aliases: ["p", "paly", "pley"],
-    Kullanımı: "play <Search/link>",
+    usage: "play <Search/link>",
 
     description: "Ses Kanalınızda bir Şarkı/Çalma Listesi çalar", //the command description for Slash Command Overview
     cooldown: 2,
@@ -21,25 +21,9 @@ module.exports = {
             //console.log(interaction, StringOption)
 
             //things u can directly access in an interaction!
-            const {
-                member,
-                channelId,
-                guildId,
-                applicationId,
-                commandName,
-                deferred,
-                replied,
-                ephemeral,
-                options,
-                id,
-                createdTimestamp
-            } = message;
-            const {
-                guild
-            } = member;
-            const {
-                channel
-            } = member.voice;
+            const { member, channelId, guildId } = message;
+            const { guild } = member;
+            const { channel } = member.voice;
             if (!channel) return message.reply({
                 embeds: [
                     new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen önce ses kanalına giriş yapın**`)
@@ -51,7 +35,7 @@ module.exports = {
                     embeds: [new MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`Ses Kanalın dolu. Giriş yapamıyorum`)
+                        .setTitle(`❌ Ses Kanalın dolu. Giriş yapamıyorum`)
                     ],
                 });
             if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
@@ -59,7 +43,7 @@ module.exports = {
                     embeds: [new MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`Baska kanalda şarkı çalıyorum yanıma gel`)
+                        .setTitle(`ℹ Baska kanalda şarkı çalıyorum yanıma gel`)
                     ],
                 });
             }
@@ -68,7 +52,7 @@ module.exports = {
                     embeds: [new MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Please add a Search Query!**`)
+                        .setTitle(`❌ **Please add a Search Query!**`)
                         .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}play <Search/Link>\``)
                     ],
                 });
@@ -83,9 +67,7 @@ module.exports = {
             })
             try {
                 let queue = client.distube.getQueue(guildId)
-                let options = {
-                    member: member,
-                }
+                let options = { member: member }
                 if (!queue) options.textChannel = guild.channels.cache.get(channelId)
                 await client.distube.playVoiceChannel(channel, Text, options)
                     //Edit the reply

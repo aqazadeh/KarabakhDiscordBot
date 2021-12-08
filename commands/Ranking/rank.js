@@ -4,7 +4,7 @@ const ee = require("../../botconfig/embed.json");
 module.exports = {
     name: "rank", //the command name for the Slash Command
     category: "Ranking",
-    Kullanımı: "rank",
+    usage: "rank",
     aliases: ["rank"],
     description: "Bir kullanicinin Sunucu Profilini Goruntuler", //the command description for Slash Command Overview
     cooldown: 1,
@@ -12,20 +12,9 @@ module.exports = {
 
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
-
 
             let rankuser = message.mentions.users.first() || message.author;
-            client.points.ensure(`${message.guild.id}-${rankuser.id}`, {
-                user: message.author.id,
-                guild: message.guild.id,
-                points: 0,
-                level: 1,
-                levelPoint: 200,
-                messages: 0,
-                money: 0,
-                status: "Çaylak"
-            });
+
             const filtered = client.points.filter(p => p.guild === message.guild.id).array();
             const sorted = filtered.sort((a, b) => b.level - a.level || b.points - a.points);
             const top10 = sorted.splice(0, message.guild.memberCount);

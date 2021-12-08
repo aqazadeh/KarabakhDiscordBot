@@ -13,7 +13,7 @@ module.exports = {
 
     category: "Queue",
     aliases: ["mix"],
-    Kullanımı: "shuffle",
+    usage: "shuffle",
 
     description: "Sırayı Rastgele (Karıştırır)", //the command description for Slash Command Overview
     cooldown: 10,

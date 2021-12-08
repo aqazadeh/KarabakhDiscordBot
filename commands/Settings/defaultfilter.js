@@ -9,7 +9,7 @@ module.exports = {
     name: "defaultfilter", //the command name for execution & for helpcmd [OPTIONAL]
     aliases: ["dfilter"],
     category: "Settings",
-    Kullanımı: "defaultfilter <Filter1 Filter2>",
+    usage: "defaultfilter <Filter1 Filter2>",
     cooldown: 10, //the command cooldown for execution & for helpcmd [OPTIONAL]
     description: "Varsayılan Filtre(leri) tanımlar", //the command description for helpcmd [OPTIONAL]
     memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]

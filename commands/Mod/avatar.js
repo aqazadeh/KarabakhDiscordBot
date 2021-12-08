@@ -4,8 +4,8 @@ const ee = require("../../botconfig/embed.json");
 const settings = require("../../botconfig/settings.json");
 module.exports = {
     name: "avatar", //the command name for the Slash Command
-    category: "System",
-    Kullanımı: "avatar",
+    category: "Fun",
+    usage: "avatar",
     aliases: ["avatar"],
     description: "Bir kullaniciyi Sunucudan Engeller", //the command description for Slash Command Overview
     cooldown: 1,

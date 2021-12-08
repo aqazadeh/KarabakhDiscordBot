@@ -13,7 +13,7 @@ module.exports = {
     name: "customspeed", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "speed <speedamount (0 - 20)>",
+    usage: "speed <speedamount (0 - 20)>",
     aliases: ["customspeed", "changespeed", "cspeed"],
 
     description: "Changes the Speed of the Song!", //the command description for Slash Command Overview

@@ -28,8 +28,7 @@
     "timeout": {
         "notallowed_to_exec_cmd": {
             "memberpermissions": 4500,
-            "alloweduserids": 3500,
-            "requiredroles": 3500
+            "alloweduserids": 3500
         },
         "minargs": 5000,
         "maxargs": 5000,

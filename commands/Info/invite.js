@@ -8,7 +8,7 @@ module.exports = {
     name: "invite", //the command name for execution & for helpcmd [OPTIONAL]
 
     category: "Info",
-    Kullanımı: "invite",
+    usage: "invite",
     aliases: ["inviteme", "addme", ],
 
     cooldown: 5, //the command cooldown for execution & for helpcmd [OPTIONAL]
@@ -22,7 +22,7 @@ module.exports = {
                 embeds: [
                     new MessageEmbed().setColor(ee.color)
                     .setFooter(ee.footertext, ee.footericon)
-                    .setDescription(`[**Benim kendi sunucuna davet etmek için tıkla!**](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot`)
+                    .setDescription(`[**Benim kendi sunucuna davet etmek için tıkla!**](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot)`)
                 ]
             });
         } catch (e) {

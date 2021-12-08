@@ -14,7 +14,7 @@ module.exports = {
     name: "filters", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "filters",
+    usage: "filters",
     aliases: ["listfilter", "listfilters", "allfilters"],
 
     description: "Tüm aktif ve olası Filtreleri listeleyin!", //the command description for Slash Command Overview

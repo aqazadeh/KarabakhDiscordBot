@@ -8,7 +8,7 @@ module.exports = {
         name: "help", //the command name for execution & for helpcmd [OPTIONAL]
 
         category: "Info",
-        Kullanımı: "help [cmdname]",
+        usage: "help [cmdname]",
         aliases: ["h", "help", "y", "yardım"],
 
         cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
@@ -33,8 +33,8 @@ module.exports = {
                         if (cmd.aliases) embed.addField("**Takma adlar**", `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
                     if (cmd.cooldown) embed.addField("**Bekleme Süresi**", `\`${cmd.cooldown} saniye\``);
                     else embed.addField("**Bekleme Süresi**", `\`${settings.default_cooldown_in_sec} saniye\``);
-                    if (cmd.Kullanımı) {
-                      embed.addField("**Kullanımı**", `\`${prefix}${cmd.Kullanımı}\``);
+                    if (cmd.usage) {
+                      embed.addField("**Kullanımı**", `\`${prefix}${cmd.usage}\``);
                       embed.setFooter("Sözdizimi: <> = gerekli, [] = isteğe bağlı");
                     }
                     return message.reply({

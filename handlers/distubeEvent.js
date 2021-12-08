@@ -419,102 +419,102 @@ module.exports = (client) => {
         } catch (error) {
           console.error(error)
         }
-      })
-      .on(`addSong`, (queue, song) => queue.textChannel.send({
-        embeds: [
-          new MessageEmbed()
-          .setColor(ee.color)
-          .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
-          .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
-            dynamic: true
-          }))
-          .setTitle(`**Şarkı Kuyruğa eklendi!**`)
-          .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
-          .addField(`⌛ **Tahmini süresi:**`, `\`${queue.songs.length - 1} Şarkı\` - \`${(Math.floor((queue.duration - song.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
-          .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
-        ]
-      }))
-      .on(`addList`, (queue, playlist) => queue.textChannel.send({
-        embeds: [
-          new MessageEmbed()
-          .setColor(ee.color)
-          .setThumbnail(playlist.thumbnail.url ? playlist.thumbnail.url : `https://img.youtube.com/vi/${playlist.songs[0].id}/mqdefault.jpg`)
-          .setFooter("💯" + playlist.user.tag, playlist.user.displayAvatarURL({
-            dynamic: true
-          }))
-          .setTitle(`**Oynatma listesi Kuyruğa eklendi!**`)
-          .setDescription(`👍 Oynatma listesi: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Song${playlist.songs.length > 0 ? "s" : ""}\``)
-          .addField(`⌛ **Tahmini süresi:**`, `\`Şarkı\` - \`${(Math.floor((queue.duration - playlist.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
-          .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
-        ]
-      }))
-      // DisTubeOptions.searchSongs = true
-      .on(`searchResult`, (message, result) => {
-        let i = 0
-        message.channel.send(`**Aşağıdan bir seçenek belirleyin**\n${result.map((song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join(`\n`)}\n*Başka bir şey girin veya iptal etmek için 60 saniye bekleyin*`)
-      })
-      // DisTubeOptions.searchSongs = true
-      .on(`searchCancel`, message => message.channel.send(`Mesaj İptal edildi`).catch((e)=>console.log(e)))
-      .on(`error`, (channel, e) => {
-        channel.send(`Bir hatayla karşılaşıldı: ${e}`).catch((e)=>console.log(e))
-        console.error(e)
-      })
-      .on(`empty`, queue => {
-        var embed = new MessageEmbed()
-        .setColor(ee.color)
-        .setFooter(ee.footertext, ee.footericon)
-        .setTitle("⛔️ KANALDAN AYRILDI")
-        .setDescription(":headphones: **Başka şarkı kalmadı**")
-        .setTimestamp()
-        queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
-          currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
-            //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-          })
-        }).catch((e) => {
-          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-        })
-      })
-      .on(`searchNoResult`, message => message.channel.send(`Aradıgınız Şarkı Bulunamadı`).catch((e)=>console.log(e)))
-      .on(`finishSong`, (queue, song) => {
-        var embed = new MessageEmbed().setColor(ee.color)
-        .setAuthor(`${song.name}`, "https://cdn.discordapp.com/attachments/883978730261860383/883978741892649000/847032838998196234.png", song.url)
-        .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
-        .setFooter(`💯 ${song.user.tag}\n⛔️ Şarkı Bitti!`, song.user.displayAvatarURL({
-          dynamic: true
-        }));
-        queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
-          currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
-            //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-          })
-        }).catch((e) => {
-          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-        })
-      })
-      .on(`finish`, queue => {
-        queue.textChannel.send({
-          embeds: [
-            new MessageEmbed().setColor(ee.color).setFooter(ee.footertext, ee.footericon)
-            .setTitle("⛔️ KANALDAN AYRILDI")
-            .setDescription(":headphones: **Başka şarkı kalmadı**")
-            .setTimestamp()
-          ]
-        })
-      })
-      .on(`initQueue`, queue => {
-        try {
-          client.settings.ensure(queue.id, {
-            defaultvolume: 50,
-            defaultautoplay: false,
-            defaultfilters: [`bassboost6`, `clear`]
-          })
-          let data = client.settings.get(queue.id)
-          queue.autoplay = Boolean(data.defaultautoplay);
-          queue.volume = Number(data.defaultvolume);
-          queue.setFilter(data.defaultfilters);
-        } catch (error) {
-          console.error(error)
-        }
-      });
+                })
+                .on(`addSong`, (queue, song) => queue.textChannel.send({
+                  embeds: [
+                    new MessageEmbed()
+                    .setColor(ee.color)
+                    .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
+                    .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
+                      dynamic: true
+                    }))
+                    .setTitle(`**Şarkı Kuyruğa eklendi!**`)
+                    .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
+                    .addField(`⌛ **Tahmini süresi:**`, `\`${queue.songs.length - 1} Şarkı\` - \`${(Math.floor((queue.duration - song.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
+                    .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
+                  ]
+                }))
+                .on(`addList`, (queue, playlist) => queue.textChannel.send({
+                  embeds: [
+                    new MessageEmbed()
+                    .setColor(ee.color)
+                    .setThumbnail(playlist.thumbnail.url ? playlist.thumbnail.url : `https://img.youtube.com/vi/${playlist.songs[0].id}/mqdefault.jpg`)
+                    .setFooter("💯" + playlist.user.tag, playlist.user.displayAvatarURL({
+                      dynamic: true
+                    }))
+                    .setTitle(`**Oynatma listesi Kuyruğa eklendi!**`)
+                    .setDescription(`👍 Oynatma listesi: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Song${playlist.songs.length > 0 ? "s" : ""}\``)
+                    .addField(`⌛ **Tahmini süresi:**`, `\`Şarkı\` - \`${(Math.floor((queue.duration - playlist.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
+                    .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
+                  ]
+                }))
+                // DisTubeOptions.searchSongs = true
+                .on(`searchResult`, (message, result) => {
+                  let i = 0
+                  message.channel.send(`**Aşağıdan bir seçenek belirleyin**\n${result.map((song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join(`\n`)}\n*Başka bir şey girin veya iptal etmek için 60 saniye bekleyin*`)
+                })
+                // DisTubeOptions.searchSongs = true
+                .on(`searchCancel`, message => message.channel.send(`Mesaj İptal edildi`).catch((e)=>console.log(e)))
+                .on(`error`, (channel, e) => {
+                  channel.send(`Bir hatayla karşılaşıldı: ${e}`).catch((e)=>console.log(e))
+                  console.error(e)
+                })
+                .on(`empty`, queue => {
+                  var embed = new MessageEmbed()
+                  .setColor(ee.color)
+                  .setFooter(ee.footertext, ee.footericon)
+                  .setTitle("⛔️ KANALDAN AYRILDI")
+                  .setDescription(":headphones: **Başka şarkı kalmadı**")
+                  .setTimestamp()
+                  queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+                    currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
+                      //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+                    })
+                  }).catch((e) => {
+                    //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+                  })
+                })
+                .on(`searchNoResult`, message => message.channel.send(`Aradıgınız Şarkı Bulunamadı`).catch((e)=>console.log(e)))
+                .on(`finishSong`, (queue, song) => {
+                  var embed = new MessageEmbed().setColor(ee.color)
+                  .setAuthor(`${song.name}`, "https://cdn.discordapp.com/attachments/883978730261860383/883978741892649000/847032838998196234.png", song.url)
+                  .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
+                  .setFooter(`💯 ${song.user.tag}\n⛔️ Şarkı Bitti!`, song.user.displayAvatarURL({
+                    dynamic: true
+                  }));
+                  queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+                    currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
+                      //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+                    })
+                  }).catch((e) => {
+                    //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+                  })
+                })
+                .on(`finish`, queue => {
+                  queue.textChannel.send({
+                    embeds: [
+                      new MessageEmbed().setColor(ee.color).setFooter(ee.footertext, ee.footericon)
+                      .setTitle("⛔️ KANALDAN AYRILDI")
+                      .setDescription(":headphones: **Başka şarkı kalmadı**")
+                      .setTimestamp()
+                    ]
+                  })
+                })
+                .on(`initQueue`, queue => {
+                  try {
+                    client.settings.ensure(queue.id, {
+                      defaultvolume: 50,
+                      defaultautoplay: false,
+                      defaultfilters: [`bassboost6`, `clear`]
+                    })
+                    let data = client.settings.get(queue.id)
+                    queue.autoplay = Boolean(data.defaultautoplay);
+                    queue.volume = Number(data.defaultvolume);
+                    queue.setFilter(data.defaultfilters);
+                  } catch (error) {
+                    console.error(error)
+                  }
+                });
   } catch (e) {
     console.log(String(e.stack).bgRed)
   }
@@ -526,7 +526,8 @@ module.exports = (client) => {
     if(djs.length == 0 ) djs = "`not setup`";
     else djs.slice(0, 15).join(", ");
     if(!newTrack) return new MessageEmbed().setColor(ee.wrongcolor).setTitle("NO SONG FOUND?!?!")
-    var embed = new MessageEmbed().setColor(ee.color)
+    var embed = new MessageEmbed()
+      .setColor(ee.color)
       .addField(`💡 İsteyen`, `>>> ${newTrack.user}`, true)
       .addField(`⏱ Süre:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
       .addField(`🌀 Şarkı Kuyruğu:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
@@ -540,13 +541,13 @@ module.exports = (client) => {
       .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
         dynamic: true
       }));
-    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`).setLabel(`Geç`)
-    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`🏠`).setLabel(`Dur`)
-    let pause = new MessageButton().setStyle('SECONDARY').setCustomId('3').setEmoji('⏸').setLabel(`Duraklat`)
-    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('4').setEmoji('🔁').setLabel(`Otomatik Oynatma`)
-    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('5').setEmoji('🔀').setLabel(`Rastgele oynat`)
+    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`)
+    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`⏹`)
+    let pause = new MessageButton().setStyle('SECONDARY').setCustomId('3').setEmoji('⏸')
+    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('4').setEmoji('🔁')
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('5').setEmoji('🔀')
     if (!newQueue.playing) {
-      pause = pause.setStyle('SUCCESS').setEmoji('▶️').setLabel(`Devam`)
+      pause = pause.setStyle('SUCCESS').setEmoji('▶️')
     }
     if (newQueue.autoplay) {
       autoplay = autoplay.setStyle('SECONDARY')

@@ -13,7 +13,7 @@ module.exports = {
     name: "custombassboost", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "custombassboost <(0-20)>",
+    usage: "custombassboost <(0-20)>",
     aliases: ["bassboost", "bb", "bass", "custombass", "cbassboost", "cbass", "cbb", "custombb"],
 
     description: "Özel bir Bas güçlendirme ayarlar!", //the command description for Slash Command Overview

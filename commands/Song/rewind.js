@@ -11,7 +11,7 @@ const {
 module.exports = {
     name: "rewind", //the command name for the Slash Command
     category: "Song",
-    Kullanımı: "rewind <TimeInSec>",
+    usage: "rewind <TimeInSec>",
     aliases: ["rwd"],
     description: "X Saniye için Geri Sarma", //the command description for Slash Command Overview
     cooldown: 10,

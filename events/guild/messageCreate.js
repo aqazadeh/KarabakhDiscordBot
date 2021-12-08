@@ -2,16 +2,14 @@
 const config = require(`../../botconfig/config.json`);
 const ee = require(`../../botconfig/embed.json`);
 const settings = require(`../../botconfig/settings.json`);
-const { onCoolDown, replacemsg } = require(`../../handlers/functions`);
+const { onCoolDown } = require(`../../handlers/functions`);
 const Discord = require(`discord.js`);
 module.exports = async(client, message) => {
-    console.log(message.member.permissions.has("ADMINISTRATOR"))
     if (!message.guild || !message.channel || message.author.bot) return;
     if (message.channel.partial) await message.channel.fetch();
     if (message.partial) await message.fetch();
 
     rank(client, message);
-
 
 
     client.settings.ensure(message.guild.id, {
@@ -36,17 +34,12 @@ module.exports = async(client, message) => {
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
     if (command) {
-
         if (onCoolDown(message, command)) {
             return message.reply({
                 embeds: [new Discord.MessageEmbed()
                     .setColor(ee.wrongcolor)
                     .setFooter(ee.footertext, ee.footericon)
-                    .setTitle(replacemsg(settings.messages.cooldown, {
-                        prefix: prefix,
-                        command: command,
-                        timeLeft: onCoolDown(message, command)
-                    }))
+                    .setTitle(`❌\`${command.name}\` komutunu tekrar kullanmadan önce lütfen ${onCoolDown(message, command)} Saniye daha bekleyin.`)
                 ]
             });
         }
@@ -58,11 +51,8 @@ module.exports = async(client, message) => {
                         new Discord.MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(replacemsg(settings.messages.notallowed_to_exec_cmd.title))
-                        .setDescription(replacemsg(settings.messages.notallowed_to_exec_cmd.description.memberpermissions, {
-                            command: command,
-                            prefix: prefix
-                        }))
+                        .setTitle(`**❌ Bu komutu çalıştırma izniniz yok!**`)
+                        .setDescription(`Şu İzinlere ihtiyacınız var: \`${command.memberpermissions}\``)
                     ]
                 }).then(msg => { setTimeout(() => { msg.delete().catch((e) => { console.log(String(e).grey) }) }, settings.timeout.notallowed_to_exec_cmd.memberpermissions) }).catch((e) => { console.log(String(e).grey) });
             }
@@ -77,29 +67,13 @@ module.exports = async(client, message) => {
                     embeds: [new Discord.MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(replacemsg(settings.messages.somethingwentwrong_cmd.title, {
-                            prefix: prefix,
-                            command: command
-                        }))
-                        .setDescription(replacemsg(settings.messages.somethingwentwrong_cmd.description, {
-                            error: error,
-                            prefix: prefix,
-                            command: command
-                        }))
+                        .setTitle(`❌ \`${command.name}\` komutu çalıştırılırken bir şeyler ters gitti`)
+                        .setDescription(`\`\`${error}\`\``)
                     ]
                 }).then(msg => { setTimeout(() => { msg.delete().catch((e) => { console.log(String(e).grey) }) }, 4000) }).catch((e) => { console.log(String(e).grey) });
             }
         }
     }
-    /* else //if the command is not found send an info msg
-            return message.reply({
-              embeds: [new Discord.MessageEmbed()
-                .setColor(ee.wrongcolor)
-                .setFooter(ee.footertext, ee.footericon)
-                .setTitle(replacemsg(settings.messages.unknown_cmd, {
-                  prefix: prefix
-                }))]
-            }).then(msg => {setTimeout(()=>{msg.delete().catch((e) => {console.log(String(e).grey)})}, 4000)}).catch((e) => {console.log(String(e).grey)});*/
 }
 
 function escapeRegex(str) {
@@ -131,46 +105,46 @@ function rank(client, message) {
     //if too short the message
 
     client.points.math(key, `+`, Number(money), `money`)
-    client.points.inc(key, `money`);
     client.points.math(key, `+`, Number(messagePoint), `points`)
-    client.points.inc(key, `points`);
-    const curLevel = client.points.get(key, `level`);
     const levelPoint = client.points.get(key, `levelPoint`);
 
     //if its a new level then do this
-    if (client.points.get(key, `points`) > client.points.get(key, `levelPoint`)) {
-        nextLevel = Math.floor(levelPoint * 2);
-        client.points.set(key, nextLevel, `levelPoint`);
-        client.points.set(key, (curLevel + 1), `level`);
+    if (client.points.get(key, `points`) > levelPoint) {
+        while (client.points.get(key, `points`) > client.points.get(key, `levelPoint`)) {
+            nextLevel = Math.floor(levelPoint * 0.5);
+            client.points.math(key, `+`, nextLevel, `levelPoint`);
+            client.points.math(key, `+`, 1, `level`);
+        }
 
-        if (curLevel + 1 > 5) {
-            client.points.set(key, "Asteğmen", `status`);
-            console.log("10")
-        } else if (curLevel + 1 > 10) {
+
+        const curLevel = client.points.get(key, `level`);
+        if (curLevel > 120) {
+            client.points.set(key, "Mareşal", `status`);
+        } else if (curLevel > 85) {
+            client.points.set(key, "Genelkurmaybaşkanı", `status`);
+        } else if (curLevel > 75) {
+            client.points.set(key, "Orgeneral", `status`);
+        } else if (curLevel > 65) {
+            client.points.set(key, "Korgeneral", `status`);
+        } else if (curLevel > 55) {
+            client.points.set(key, "Tümgeneral", `status`);
+        } else if (curLevel > 45) {
+            client.points.set(key, "Tuğgeneral", `status`);
+        } else if (curLevel > 35) {
+            client.points.set(key, "Albay", `status`);
+        } else if (curLevel > 30) {
+            client.points.set(key, "Yarbay", `status`);
+        } else if (curLevel > 25) {
+            client.points.set(key, "Binbaşı", `status`);
+        } else if (curLevel > 20) {
+            client.points.set(key, "Yüzbaşı", `status`);
+        } else if (curLevel > 15) {
+            client.points.set(key, "Üsteğmen", `status`);
+        } else if (curLevel > 10) {
             client.points.set(key, "Teğmen", `status`);
             console.log("15")
-        } else if (curLevel + 1 > 15) {
-            client.points.set(key, "Üsteğmen", `status`);
-        } else if (curLevel + 1 > 20) {
-            client.points.set(key, "Yüzbaşı", `status`);
-        } else if (curLevel + 1 > 25) {
-            client.points.set(key, "Binbaşı", `status`);
-        } else if (curLevel + 1 > 30) {
-            client.points.set(key, "Yarbay", `status`);
-        } else if (curLevel + 1 > 35) {
-            client.points.set(key, "Albay", `status`);
-        } else if (curLevel + 1 > 45) {
-            client.points.set(key, "Tuğgeneral", `status`);
-        } else if (curLevel + 1 > 55) {
-            client.points.set(key, "Tümgeneral", `status`);
-        } else if (curLevel + 1 > 65) {
-            client.points.set(key, "Korgeneral", `status`);
-        } else if (curLevel + 1 > 75) {
-            client.points.set(key, "Orgeneral", `status`);
-        } else if (curLevel + 1 > 85) {
-            client.points.set(key, "Genelkurmaybaşkanı", `status`);
-        } else if (curLevel + 1 > 120) {
-            client.points.set(key, "Mareşal", `status`);
+        } else if (curLevel > 5) {
+            client.points.set(key, "Asteğmen", `status`);
         } else {
             console.log("hata")
         }
@@ -182,7 +156,7 @@ function rank(client, message) {
                             new Discord.MessageEmbed()
                             .setTitle(`Tebrikler: ` + message.author.username)
                             .setTimestamp()
-                            .setDescription(`Seviye Atladiniz: **\`${curLevel + 1}\`**! (Puan: \`${client.points.get(key, `points`)}\`) `)
+                            .setDescription(`Seviye Atladiniz: **\`${curLevel}\`**! (Puan: \`${client.points.get(key, `points`)}\`) `)
                                 .setColor(ee.wrongcolor)
                                 .setFooter(ee.footertext, ee.footericon)
                           ]

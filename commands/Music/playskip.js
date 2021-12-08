@@ -13,7 +13,7 @@ module.exports = {
 
         category: "Music",
         aliases: ["ps"],
-        Kullanımı: "playskip <Search/link>",
+        usage: "playskip <Search/link>",
 
         description: "Plays a Song/Playlist and skips!", //the command description for Slash Command Overview
         cooldown: 2,

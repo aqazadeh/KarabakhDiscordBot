@@ -5,7 +5,7 @@ module.exports = {
 
     category: "Settings",
     aliases: ["dautoplay"],
-    Kullanımı: "defaultautoplay",
+    usage: "defaultautoplay",
 
     cooldown: 10, //the command cooldown for execution & for helpcmd [OPTIONAL]
     description: "Otomatik oynatmanayı varsayılan olarak tanımlar!", //the command description for helpcmd [OPTIONAL]

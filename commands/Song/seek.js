@@ -11,7 +11,7 @@ const {
 module.exports = {
         name: "seek", //the command name for the Slash Command
         category: "Song",
-        Kullanımı: "seek <TimeInSec>",
+        usage: "seek <TimeInSec>",
         aliases: ["sek"],
         description: "Şarkıda belirli bir Pozisyona atlar", //the command description for Slash Command Overview
         cooldown: 10,

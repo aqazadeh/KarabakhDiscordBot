@@ -11,7 +11,7 @@ const {
 module.exports = {
     name: "grab", //the command name for the Slash Command
     category: "Song",
-    Kullanımı: "grab",
+    usage: "grab",
     aliases: ["take", "steal"],
     description: "Jumps to a specific Position in the Song", //the command description for Slash Command Overview
     cooldown: 10,
@@ -81,7 +81,7 @@ module.exports = {
                     message.reply({
                         content: `📪 **Şarkı yakalandı! Mesajlarını kontrol et!**`,
                     })
-                }).catch(() => {
+                }).catch(e => {
                     message.reply({
                         content: ` **sana mesaj atamıyorum!**`,
                     })

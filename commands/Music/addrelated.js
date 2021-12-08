@@ -8,7 +8,7 @@ const settings = require("../../botconfig/settings.json");
 module.exports = {
         name: "addrelated", //the command name for the Slash Command
         category: "Music",
-        Kullanımı: "addrelated",
+        usage: "addrelated",
         description: "Geçerli Şarkıya benzer/ilgili bir şarkı ekleyin!", //the command description for Slash Command Overview
         cooldown: 2,
 

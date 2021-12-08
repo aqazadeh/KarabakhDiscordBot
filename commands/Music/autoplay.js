@@ -13,7 +13,7 @@ module.exports = {
 
         category: "Music",
         aliases: ["ap"],
-        Kullanımı: "autoplay",
+        usage: "autoplay",
 
         description: "Otomatik oynatma", //the command description for Slash Command Overview
         cooldown: 5,

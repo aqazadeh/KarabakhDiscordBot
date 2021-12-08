@@ -13,7 +13,7 @@ module.exports = {
 
         category: "Queue",
         aliases: ["stats"],
-        Kullanımı: "status",
+        usage: "status",
 
         description: "Kuyruktakı şarkıları gösterir", //the command description for Slash Command Overview
         cooldown: 10,

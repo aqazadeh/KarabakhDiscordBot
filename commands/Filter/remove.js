@@ -13,7 +13,7 @@ module.exports = {
     name: "removefilter", //the command name for the Slash Command
 
     category: "Filter",
-    Kullanımı: "removefilter <Filter1 Filter2>",
+    usage: "removefilter <Filter1 Filter2>",
     aliases: ["removefilters", "remove", "removef"],
 
     description: "Sıradan bir Filtreyi Kaldırır", //the command description for Slash Command Overview

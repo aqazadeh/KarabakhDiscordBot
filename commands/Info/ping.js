@@ -8,7 +8,7 @@ module.exports = {
     name: "ping", //the command name for the Slash Command
 
     category: "Info",
-    Kullanımı: "ping",
+    usage: "ping",
     aliases: ["latency"],
 
     description: "Botun ne kadar hızlı olduğu hakkında size bilgi verir", //the command description for Slash Command Overview

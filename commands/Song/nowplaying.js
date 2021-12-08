@@ -11,7 +11,7 @@ const {
 module.exports = {
         name: "nowplaying", //the command name for the Slash Command
         category: "Song",
-        Kullanımı: "nowplaying",
+        usage: "nowplaying",
         aliases: ["np", "current"],
         description: "Geçerli Çalmakta olan Şarkıyı gösterir", //the command description for Slash Command Overview
         cooldown: 5,
