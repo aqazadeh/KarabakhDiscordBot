@@ -5,7 +5,7 @@ module.exports = {
 
     category: "Settings",
     aliases: ["djrole", "role", "drole", "djs", "dj-role"],
-    Kullanımı: "dj <add/remove> <@Role>",
+    usage: "dj <add/remove> <@Role>",
 
     cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
     description: "Dj'leri yönetir!", //the command description for helpcmd [OPTIONAL]
@@ -15,12 +15,8 @@ module.exports = {
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
-            const {
-                member,
-            } = message;
-            const {
-                guild
-            } = member;
+            const { member } = message;
+            const { guild } = member;
             if (!args[0]) {
                 return message.reply({
                     embeds: [new MessageEmbed()

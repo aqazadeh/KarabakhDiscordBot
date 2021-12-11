@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require("discord.js");
-const Canvas = require("../../handlers/canvas/index");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
 module.exports = {
     name: "givemoney", //the command name for the Slash Command
@@ -75,7 +74,7 @@ module.exports = {
                         .setColor(ee.color)
                         .setFooter(ee.footertext, ee.footericon)
                         .setTitle(`**✅ Başarılı\`**`)
-                        .setDescription(`**${message.member} kullanıcısı ${user} kullanıcısına ${count} coin para gönderdi**`)
+                        .setDescription(`**${message.member} kullanıcısı ${user} kullanıcısına ${count} coin gönderdi**`)
 
                     ],
                 })

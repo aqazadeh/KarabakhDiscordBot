@@ -1,9 +1,5 @@
-const {
-    MessageEmbed
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
 module.exports = {
     name: "defaultvolume", //the command name for execution & for helpcmd [OPTIONAL]
     category: "Settings",
@@ -17,22 +13,8 @@ module.exports = {
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
-            const {
-                member,
-                channelId,
-                guildId,
-                applicationId,
-                commandName,
-                deferred,
-                replied,
-                ephemeral,
-                options,
-                id,
-                createdTimestamp
-            } = message;
-            const {
-                guild
-            } = member;
+            const { member } = message;
+            const { guild } = member;
             if (!args[0]) {
                 return message.reply({
                     embeds: [

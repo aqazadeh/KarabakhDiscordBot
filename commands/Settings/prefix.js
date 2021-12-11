@@ -1,9 +1,6 @@
-const {
-    MessageEmbed
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
+const config = require("../../botconfig/config.json");
 module.exports = {
     name: "prefix", //the command name for execution & for helpcmd [OPTIONAL]
     category: "Settings",

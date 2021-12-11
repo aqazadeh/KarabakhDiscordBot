@@ -1,18 +1,16 @@
-const {
-    MessageEmbed
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
+const lang = require("../../lang/tr.json");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
+const { replacemsg } = require("../../handlers/functions.js")
 module.exports = {
         name: "help", //the command name for execution & for helpcmd [OPTIONAL]
 
         category: "Info",
         usage: "help [cmdname]",
-        aliases: ["h", "help", "y", "yardım"],
-
+        aliases: ["h", "help"],
+        example: ["help", "help play"],
         cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
-        description: "Tüm Komutları döndürür", //the command description for helpcmd [OPTIONAL]
+        description: lang.help.generaldescription, //the command description for helpcmd [OPTIONAL]
         memberpermissions: [], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
 
 
@@ -21,22 +19,25 @@ module.exports = {
                     let prefix = client.settings.get(message.guild.id, "prefix")
                     if (args[0] && args[0].length > 0) {
                         const embed = new MessageEmbed();
-                        const cmd = client.commands.get(args[0].toLowerCase()) || client.commands.get(client.aliases.get(args.toLowerCase()));
+                        console.log(args[0])
+                        const cmd = client.commands.get(args[0].toLowerCase()) || client.commands.get(client.aliases.get(args[0].toLowerCase()));
                         if (!cmd) {
                             return message.reply({
-                                embeds: [embed.setColor(ee.wrongcolor).setDescription(`Komut için bilgi bulunamadı**${args.toLowerCase()}**`)]
+                                embeds: [embed.setColor(ee.wrongcolor)
+                                    .setDescription(replacemsg(lang.help.commandNotFound, { command: args[0].toLowerCase() }))
+                                ]
                             });
                         }
-                        if (cmd.name) embed.addField("**Komut ismi**", `\`${cmd.name}\``);
-                        if (cmd.name) embed.setTitle(`Hakkında detaylı bilgi:\`${cmd.name}\``);
-                        if (cmd.description) embed.addField("**Açıklama**", `\`${cmd.description}\``);
-                        if (cmd.aliases) embed.addField("**Takma adlar**", `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
-                    if (cmd.cooldown) embed.addField("**Bekleme Süresi**", `\`${cmd.cooldown} saniye\``);
-                    else embed.addField("**Bekleme Süresi**", `\`${settings.default_cooldown_in_sec} saniye\``);
+                        if (cmd.name) embed.addField(lang.help.commandName, `\`${cmd.name}\``);
+                        if (cmd.name) embed.setTitle(replacemsg(lang.help.commandSingTitle, { command: cmd.name }));
+                        if (cmd.description) embed.addField(lang.help.commandSingleDesc, `\`${cmd.description}\``);
+                        if (cmd.aliases) embed.addField(lang.help.commandSingleAliases, `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
+                    if (cmd.cooldown) embed.addField(lang.help.commandSingleCooldown, `\`${cmd.cooldown}\``);
                     if (cmd.usage) {
-                      embed.addField("**Kullanımı**", `\`${prefix}${cmd.usage}\``);
-                      embed.setFooter("Sözdizimi: <> = gerekli, [] = isteğe bağlı");
+                      embed.addField(lang.help.commandSingleUsage, `\`${prefix}${cmd.usage}\``);
+                      embed.setFooter(lang.help.commandSingleSyntax);
                     }
+                    if(cmd.example) embed.addField(lang.help.commandSingleExample, `\`${cmd.example.map((a) => `${a}`).join("`\n `")}\``);
                     return message.reply({
                       embeds: [embed.setColor(ee.color)]
                     });
@@ -44,9 +45,9 @@ module.exports = {
                     const embed = new MessageEmbed()
                       .setColor(ee.color)
                       .setThumbnail(ee.footericon)
-                      .setTitle("Yardım 🔰 Komutları")
-                      .setDescription(`**[Sunucuna beni davet et](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands) **`)
-                      .setFooter(`Komut Açıklama ve Bilgilerini görmek için şunu yazın: ${prefix}help [Komut ismi]`, ee.footericon);
+                      .setTitle(lang.help.title)
+                      .setDescription(`**[${lang.help.description}](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands) **`)
+                      .setFooter(replacemsg(lang.help.commandFooter, { prefix }), ee.footericon);
                     const commands = (category) => {
                       return client.commands.filter((cmd) => cmd.category === category).map((cmd) => `\`${cmd.name}\``);
                     };
@@ -69,7 +70,7 @@ module.exports = {
           embeds: [new MessageEmbed()
             .setColor(ee.wrongcolor)
             .setFooter(ee.footertext, ee.footericon)
-            .setTitle(` Hata | Bir hata oluştu`)
+            .setTitle(lang.general.error)
             .setDescription(`\`\`\`${e.message ? String(e.message).substr(0, 2000) : String(e).substr(0, 2000)}\`\`\``)
           ]
         });

@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require("discord.js");
-const Canvas = require("../../handlers/canvas/index");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
 module.exports = {
     name: "givexp", //the command name for the Slash Command

@@ -19,7 +19,7 @@ module.exports = async(client) => {
             }
         }
         await ["client", "guild"].forEach(e => load_dir(e));
-        console.log(`${amount} Events yüklendi`.brightGreen);
+        console.log(`${amount} Event yüklendi`.brightGreen);
         try {
             const stringlength2 = 69;
             console.log("\n")

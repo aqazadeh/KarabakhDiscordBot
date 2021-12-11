@@ -1,29 +1,21 @@
-const {
-    MessageEmbed
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
-const filters = require("../../botconfig/filters.json")
+const filters = require("../../botconfig/filters.json");
 module.exports = {
     name: "defaultfilter", //the command name for execution & for helpcmd [OPTIONAL]
     aliases: ["dfilter"],
     category: "Settings",
     usage: "defaultfilter <Filter1 Filter2>",
     cooldown: 10, //the command cooldown for execution & for helpcmd [OPTIONAL]
-    description: "Varsayılan Filtre(leri) tanımlar", //the command description for helpcmd [OPTIONAL]
+    description: "Varsayılan Filtre tanımlar", //the command description for helpcmd [OPTIONAL]
     memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
 
 
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
-            const {
-                member,
-            } = message;
-            const {
-                guild
-            } = member;
+            const { member } = message;
+            const { guild } = member;
             client.settings.ensure(guild.id, {
                 defaultvolume: 50,
                 defaultautoplay: false,

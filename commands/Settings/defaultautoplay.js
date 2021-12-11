@@ -15,22 +15,8 @@ module.exports = {
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
-            const {
-                member,
-                channelId,
-                guildId,
-                applicationId,
-                commandName,
-                deferred,
-                replied,
-                ephemeral,
-                options,
-                id,
-                createdTimestamp
-            } = message;
-            const {
-                guild
-            } = member;
+            const { member } = message;
+            const { guild } = member;
             client.settings.ensure(guild.id, {
                 defaultvolume: 50,
                 defaultautoplay: false,

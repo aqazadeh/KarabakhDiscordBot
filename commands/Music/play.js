@@ -1,10 +1,5 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
 module.exports = {
     name: "play", //the command name for the Slash Command
 

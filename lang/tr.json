@@ -1,0 +1,37 @@
+{
+    "general": {
+        "error": "Hata | Bir hata oluştu"
+    },
+    "help": {
+        "generaldescription": "Tüm Komutları döndürür",
+        "commandNotFound": "Komut için bilgi bulunamadı: ** {command} **",
+        "commandName": "**Komut ismi**",
+        "commandSingTitle": "**{command}** :Komutu hakkında detaylı bilgi",
+        "commandSingleDesc": "**Açıklama**",
+        "commandSingleAliases": "**Takma adlar**",
+        "commandSingleCooldown": "**Bekleme Süresi**",
+        "commandSingleUsage": "**Kullanımı**",
+        "commandSingleSyntax": "Söz dizimi: <> = gerekli, [] = isteğe bağlı",
+        "commandSingleExample": "**Örnek**: ",
+        "title": "Yardım 🔰 Komutları",
+        "description": "Sunucuna beni davet et",
+        "commandFooter": "Komut Açıklama ve Bilgilerini görmek için şunu yazın: {prefix}help [Komut ismi]"
+    },
+    "invite": {
+        "generaldescription": "Size bir davet bağlantısı gönderir",
+        "description": "**Benim kendi sunucuna davet etmek için tıkla!**"
+
+    },
+    "server": {
+        "generaldescription": "Server Bilgisini gösterir!",
+        "serverID": "**🆔 Server ID**",
+        "owner": "**👑 Kurucu**",
+        "channels": "**📣 Kanallar**",
+        "textChannels": "Text: ",
+        "voiceChannels": "Ses: ",
+        "members": "**🧑🏼‍🤝‍🧑🏻 Üyeler: **",
+        "bannedMembers": "**❌ Engellenmiş Üye**",
+        "roles": "**🔐 Yetki**"
+    }
+
+}

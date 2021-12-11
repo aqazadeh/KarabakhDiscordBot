@@ -1,13 +1,6 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
-const {
-    check_if_dj
-} = require("../../handlers/functions")
+const { check_if_dj } = require("../../handlers/functions");
 module.exports = {
     name: "skip", //the command name for the Slash Command
 
@@ -22,25 +15,9 @@ module.exports = {
     run: async(client, message, args) => {
         try {
             //things u can directly access in an interaction!
-            const {
-                member,
-                channelId,
-                guildId,
-                applicationId,
-                commandName,
-                deferred,
-                replied,
-                ephemeral,
-                options,
-                id,
-                createdTimestamp
-            } = message;
-            const {
-                guild
-            } = member;
-            const {
-                channel
-            } = member.voice;
+            const { member, guildId } = message;
+            const { guild } = member;
+            const { channel } = member.voice;
             if (!channel) return message.reply({
                 embeds: [
                     new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen Önce Ses Kanalına katılın!**`)
@@ -74,15 +51,30 @@ module.exports = {
                         ],
                     });
                 }
-                await newQueue.skip();
-                message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setTimestamp()
-                        .setTitle(`⏭ **Bir sonraki Şarkıya atlandı!**`)
-                        .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-                    ]
-                })
+                await newQueue.skip()
+                    .then(() => {
+                        message.reply({
+                            embeds: [new MessageEmbed()
+                                .setColor(ee.color)
+                                .setTimestamp()
+                                .setTitle(`⏭ **Bir sonraki Şarkıya atlandı!**`)
+                                .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+                            ]
+                        })
+                    })
+                    .catch(() => {
+                        newQueue.stop();
+                        message.reply({
+                            embeds: [new MessageEmbed()
+                                .setColor(ee.color)
+                                .setTimestamp()
+                                .setTitle(`❌ **Listede Baska Şarkı yok!**`)
+                                .setDescription(`:headphones: **Başka şarkı kalmadı**`)
+                                .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+                            ]
+                        })
+                    })
+
             } catch (e) {
                 console.log(e.stack ? e.stack : e)
                 message.reply({

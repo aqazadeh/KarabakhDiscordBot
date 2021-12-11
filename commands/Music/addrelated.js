@@ -1,10 +1,5 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
+const { MessageEmbed } = require("discord.js");
 const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
 module.exports = {
         name: "addrelated", //the command name for the Slash Command
         category: "Music",
@@ -16,25 +11,9 @@ module.exports = {
         run: async(client, message, args) => {
             try {
                 //things u can directly access in an interaction!
-                const {
-                    member,
-                    channelId,
-                    guildId,
-                    applicationId,
-                    commandName,
-                    deferred,
-                    replied,
-                    ephemeral,
-                    options,
-                    id,
-                    createdTimestamp
-                } = message;
-                const {
-                    guild
-                } = member;
-                const {
-                    channel
-                } = member.voice;
+                const { member, guildId } = message;
+                const { guild } = member;
+                const { channel } = member.voice;
                 if (!channel) return message.reply({
                     embeds: [
                         new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen önce ses kanalına giriş yapın**`)

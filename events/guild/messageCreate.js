@@ -1,7 +1,6 @@
 //Import Modules
 const config = require(`../../botconfig/config.json`);
 const ee = require(`../../botconfig/embed.json`);
-const settings = require(`../../botconfig/settings.json`);
 const { onCoolDown } = require(`../../handlers/functions`);
 const Discord = require(`discord.js`);
 module.exports = async(client, message) => {
@@ -15,7 +14,7 @@ module.exports = async(client, message) => {
     client.settings.ensure(message.guild.id, {
         prefix: config.prefix,
         defaultvolume: 100,
-        defaultautoplay: true,
+        defaultautoplay: false,
         defaultfilters: [`bassboost6`, `clear`],
         djroles: []
     })
@@ -47,14 +46,22 @@ module.exports = async(client, message) => {
             //if Command has specific permission return error
             if (command.memberpermissions && command.memberpermissions.length > 0 && !message.member.permissions.has(command.memberpermissions)) {
                 return message.reply({
-                    embeds: [
-                        new Discord.MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`**❌ Bu komutu çalıştırma izniniz yok!**`)
-                        .setDescription(`Şu İzinlere ihtiyacınız var: \`${command.memberpermissions}\``)
-                    ]
-                }).then(msg => { setTimeout(() => { msg.delete().catch((e) => { console.log(String(e).grey) }) }, settings.timeout.notallowed_to_exec_cmd.memberpermissions) }).catch((e) => { console.log(String(e).grey) });
+                        embeds: [
+                            new Discord.MessageEmbed()
+                            .setColor(ee.wrongcolor)
+                            .setFooter(ee.footertext, ee.footericon)
+                            .setTitle(`**❌ Bu komutu çalıştırma izniniz yok!**`)
+                            .setDescription(`Şu İzinlere ihtiyacınız var: \`${command.memberpermissions}\``)
+                        ]
+                    })
+                    .then(msg => {
+                        setTimeout(() => {
+                            msg.delete()
+                                .catch((e) => {
+                                    console.log(String(e).grey)
+                                })
+                        }, 5000)
+                    }).catch((e) => { console.log(String(e).grey) });
             }
 
 
@@ -62,16 +69,7 @@ module.exports = async(client, message) => {
             //run the command with the parameters:  client, message, args, Cmduser, text, prefix,
             command.run(client, message, args, args.join(` `).split(`++`).filter(Boolean), message.member, args.join(` `), prefix);
         } catch (error) {
-            if (settings.somethingwentwrong_cmd) {
-                return message.reply({
-                    embeds: [new Discord.MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ \`${command.name}\` komutu çalıştırılırken bir şeyler ters gitti`)
-                        .setDescription(`\`\`${error}\`\``)
-                    ]
-                }).then(msg => { setTimeout(() => { msg.delete().catch((e) => { console.log(String(e).grey) }) }, 4000) }).catch((e) => { console.log(String(e).grey) });
-            }
+            console.log(String(error).grey)
         }
     }
 }

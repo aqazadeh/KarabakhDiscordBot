@@ -1,12 +1,6 @@
-const {
-    MessageEmbed,
-    Collection
-} = require("discord.js");
+const { Collection } = require("discord.js");
 
-const Discord = require("discord.js")
-const config = require("../botconfig/config.json");
-const ee = require("../botconfig/embed.json");
-const settings = require("../botconfig/settings.json");
+
 //EXPORT ALL FUNCTIONS
 module.exports.shuffle = shuffle;
 module.exports.createBar = createBar;
@@ -44,27 +38,17 @@ function check_if_dj(client, member, song) {
 
 
 module.exports.replacemsg = replacedefaultmessages
-    /**
-     * 
-     * @param {*} text The Text that should be replaced, usually from /botconfig/settings.json
-     * @param {*} options Those Options are what are needed for the replaceMent!
-     * @returns STRING
-     */
+
 function replacedefaultmessages(text, o = {}) {
     if (!text || text == undefined || text == null) throw "No Text for the replacedefault message added as First Parameter";
     const options = Object(o)
     if (!options || options == undefined || options == null) return String(text)
     return String(text)
-        .replace(/%{user}%/gi, options && options.user ? options.user : "%{user}%")
+        .replace(/{user}/gi, options && options.user ? options.user : "{user}")
+        .replace(/{command}/gi, options && options.command ? options.command : "{command}")
+        .replace(/{prefix}/gi, options && options.prefix ? options.prefix : "{prefix}")
 
 }
-
-/**
- * 
- * @param {*} message A DiscordMessage, with the client, information
- * @param {*} command The Command with the command.name
- * @returns BOOLEAN
- */
 
 function onCoolDown(message, command) {
     if (!message || !message.client) throw "No Message with a valid DiscordClient granted as First Parameter";
@@ -75,7 +59,7 @@ function onCoolDown(message, command) {
     }
     const now = Date.now(); //get the current time
     const timestamps = client.cooldowns.get(command.name); //get the timestamp of the last used commands
-    const cooldownAmount = (command.cooldown || settings.default_cooldown_in_sec) * 1000; //get the cooldownamount of the command, if there is no cooldown there will be automatically 1 sec cooldown, so you cannot spam it^^
+    const cooldownAmount = (command.cooldown || 1.5) * 1000; //get the cooldownamount of the command, if there is no cooldown there will be automatically 1 sec cooldown, so you cannot spam it^^
     if (timestamps.has(message.member.id)) { //if the user is on cooldown
         const expirationTime = timestamps.get(message.member.id) + cooldownAmount; //get the amount of time he needs to wait until he can run the cmd again
         if (now < expirationTime) { //if he is still on cooldonw
