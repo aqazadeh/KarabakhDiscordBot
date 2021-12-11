@@ -79,6 +79,8 @@ require('events').defaultMaxListeners = 100;
 client.settings = new Enmap({ name: "settings", dataDir: "./databases/settings" });
 client.infos = new Enmap({ name: "infos", dataDir: "./databases/infos" });
 client.InOut = new Enmap({ name: "InOut", dataDir: "./databases/InOut" });
+client.musicForMe = new Enmap({ name: "musicForMe", dataDir: "./databases/musicforme" });
+
 ["events", "commands", settings.antiCrash ? "antiCrash" : null, "distubeEvent"]
 .filter(Boolean)
     .forEach(h => {

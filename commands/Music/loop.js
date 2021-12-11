@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["repeat", "repeatmode", "l"],
     usage: "loop <song/queue/off>",
 
-    description: "Şarkı/Kuyruk Döngüsünü Etkinleştir/Devre Dışı Bırak", //the command description for Slash Command Overview
+    description: "Şarkı/Liste Döngüsünü Etkinleştir/Devre Dışı Bırak", //the command description for Slash Command Overview
     cooldown: 5,
 
 
@@ -91,7 +91,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.color)
                             .setTimestamp()
-                            .setTitle(`🔁 **__Şarkı__-Döngüsü** etkinleştirildi ||(**Kuyruk Döngüsü** devre dışı bırakıldı)||`)
+                            .setTitle(`🔁 **__Şarkı__-Döngüsü** etkinleştirildi ||(**Liste Döngüsü** devre dışı bırakıldı)||`)
                             .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                         ]
                     })
@@ -100,7 +100,7 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor(ee.color)
                             .setTimestamp()
-                            .setTitle(`🔂 **__Kuyruk__-Döngüsünü Etkinleştirdi!** ||(**Şarkı Döngüsünü Devre Dışı Bıraktı**)||`)
+                            .setTitle(`🔂 **__Liste__-Döngüsünü Etkinleştirdi!** ||(**Şarkı Döngüsünü Devre Dışı Bıraktı**)||`)
                             .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                         ]
                     })

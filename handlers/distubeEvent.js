@@ -3,15 +3,8 @@ const PlayerMap = new Map()
 const Discord = require(`discord.js`);
 const config = require(`../botconfig/config.json`);
 const ee = require(`../botconfig/embed.json`);
-const {
-    MessageButton,
-    MessageActionRow,
-    MessageEmbed
-} = require(`discord.js`);
-const {
-    check_if_dj
-} = require("./functions");
-let songEditInterval = null;
+const { MessageButton, MessageActionRow, MessageEmbed } = require(`discord.js`);
+const { check_if_dj } = require("./functions");
 module.exports = (client) => {
         try {
             client.distube.on(`playSong`, async(queue, track) => {
@@ -34,24 +27,6 @@ module.exports = (client) => {
                             //array of all embeds, here simplified just 10 embeds with numbers 0 - 9
                             let lastEdited = false;
 
-                            /**
-                             * @INFORMATION - EDIT THE SONG MESSAGE EVERY 10 SECONDS!
-                             */
-                            try { clearInterval(songEditInterval) } catch (e) {}
-                            songEditInterval = setInterval(async() => {
-                                if (!lastEdited) {
-                                    try {
-                                        var newQueue = client.distube.getQueue(queue.id)
-                                        var newTrack = newQueue.songs[0];
-                                        var data = receiveQueueData(newQueue, newTrack)
-                                        await currentSongPlayMsg.edit(data).catch((e) => {
-                                            //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-                                        })
-                                    } catch (e) {
-                                        clearInterval(songEditInterval)
-                                    }
-                                }
-                            }, 10000)
 
                             collector.on('collect', async i => {
                                         if (check_if_dj(client, i.member, client.distube.getQueue(i.guild.id).songs[0])) {
@@ -99,14 +74,13 @@ module.exports = (client) => {
                                             if (newQueue.songs.length == 0) {
                                                 //if its on autoplay mode, then do autoplay before leaving...
                                                 i.reply({
-                                                    embeds: [new MessageEmbed()
-                                                        .setColor(ee.color)
-                                                        .setTimestamp()
-                                                        .setTitle(`⏹ **Oynatmayı bıraktı ve Kanaldan ayrıldı**`)
-                                                    ]
-                                                })
-                                                clearInterval(songEditInterval);
-                                                //edit the current song message
+                                                        embeds: [new MessageEmbed()
+                                                            .setColor(ee.color)
+                                                            .setTimestamp()
+                                                            .setTitle(`⏹ **Oynatmayı bıraktı ve Kanaldan ayrıldı**`)
+                                                        ]
+                                                    })
+                                                    //edit the current song message
                                                 await client.distube.stop(i.guild.id)
                                                 return
                                             }
@@ -141,15 +115,14 @@ module.exports = (client) => {
                                                     })
                                                     //stop the track
                                             i.reply({
-                                                embeds: [new MessageEmbed()
-                                                    .setColor(ee.color)
-                                                    .setTimestamp()
-                                                    .setTitle(`⏹ **Çalmayı bıraktı ve Kanaldan ayrıldı!**`)
-                                                    .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-                                                ]
-                                            })
-                                            clearInterval(songEditInterval);
-                                            //edit the current song message
+                                                    embeds: [new MessageEmbed()
+                                                        .setColor(ee.color)
+                                                        .setTimestamp()
+                                                        .setTitle(`⏹ **Çalmayı bıraktı ve Kanaldan ayrıldı!**`)
+                                                        .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+                                                    ]
+                                                })
+                                                //edit the current song message
                                             await client.distube.stop(i.guild.id)
                                         }
                                         //pause/resume
@@ -403,7 +376,7 @@ module.exports = (client) => {
                   embeds: [new MessageEmbed()
                     .setColor(ee.color)
                     .setTimestamp()
-                    .setTitle(`${newQueue.repeatMode == 2 ? `**Kuyruk Döngüsü Etkin **`: ` **Kuyruk Döngüsü Kapalı **`}`)
+                    .setTitle(`${newQueue.repeatMode == 2 ? `**Liste Döngüsü Etkin **`: ` **Liste Döngüsü Kapalı **`}`)
                     .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({dynamic: true}))]
                   })
                 var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
@@ -427,7 +400,7 @@ module.exports = (client) => {
         .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
           dynamic: true
         }))
-        .setTitle(`**Şarkı Kuyruğa eklendi!**`)
+        .setTitle(`**Şarkı listeye eklendi!**`)
         .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
         .addField(`🌀 **Şarkı süresi:**`, `\`${song.formattedDuration}\``)
       ]
@@ -440,31 +413,38 @@ module.exports = (client) => {
         .setFooter("💯" + playlist.user.tag, playlist.user.displayAvatarURL({
           dynamic: true
         }))
-        .setTitle(`**Oynatma listesi Kuyruğa eklendi!**`)
-        .setDescription(`👍 Oynatma listesi: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Song${playlist.songs.length > 0 ? "s" : ""}\``)
-        .addField(`⌛ **Tahmini süresi:**`, `\`Şarkı\` - \`${(Math.floor((queue.duration - playlist.duration) / 60 * 100) / 100).toString().replace(".", ":")}\``)
-        .addField(`🌀 **Şarkı süresi:**`, `\`${queue.formattedDuration}\``)
+        .setTitle(`**Oynatma listesi Listeye eklendi!**`)
+        .setDescription(`👍 Oynatma listesi: [\`${playlist.name}\`](${playlist.url ? playlist.url : ""})  -  \`${playlist.songs.length} Şarkı\``)
+        .addField(`🌀 **Şarkı süresi:**`, `\`${playlist.formattedDuration}\``)
       ]
     }));
 
     client.distube.on(`error`, (channel, e) => {
+      channel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+        currentSongPlayMsg.delete().catch((e) => {
+          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+        })
+      }).catch((e) => {
+        //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+      })
       channel.send(`Bir hatayla karşılaşıldı: ${e}`).catch((e)=>console.log(e))
       console.error(e)
     });
     client.distube.on(`empty`, queue => {
+      queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+        currentSongPlayMsg.delete().catch((e) => {
+          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+        })
+      }).catch((e) => {
+        //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+      })
       var embed = new MessageEmbed()
       .setColor(ee.color)
       .setFooter(ee.footertext, ee.footericon)
       .setTitle("⛔️ KANALDAN AYRILDI")
       .setDescription(":headphones: **Başka şarkı kalmadı**")
       .setTimestamp()
-      queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
-        currentSongPlayMsg.edit({embeds: [embed], components: []}).catch((e) => {
-          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-        })
-      }).catch((e) => {
-        //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-      })
+      queue.textChannel.send({embeds: [embed]})
     });
     client.distube.on(`searchNoResult`, message => {
       message.channel.send(`Aradıgınız Şarkı Bulunamadı`).catch((e)=>console.log(e))
@@ -479,6 +459,13 @@ module.exports = (client) => {
       })
     });
     client.distube.on(`finish`, queue => {
+      queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
+        currentSongPlayMsg.delete().catch((e) => {
+          //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+        })
+      }).catch((e) => {
+        //console.log(e.stack ? String(e.stack).grey : String(e).grey)
+      })
       queue.textChannel.send({
         embeds: [
           new MessageEmbed().setColor(ee.color).setFooter(ee.footertext, ee.footericon)
@@ -517,8 +504,8 @@ module.exports = (client) => {
     var embed = new MessageEmbed()
       .setColor(ee.color)
       .addField(`💡 İsteyen`, `>>> ${newTrack.user}`, true)
-      .addField(`⏱ Süre:`, `>>> \`${newQueue.formattedCurrentTime} / ${newTrack.formattedDuration}\``, true)
-      .addField(`🌀 Şarkı Kuyruğu:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
+      .addField(`⏱ Süre:`, `>>> \` ${newTrack.formattedDuration}\``, true)
+      .addField(`🌀 Şarkı Listesi:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
       .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
       .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
       .addField(`❔ Filtreler:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 2 ? false : true)
@@ -536,10 +523,10 @@ module.exports = (client) => {
     if (!newQueue.playing) {
       pause = pause.setStyle('SUCCESS').setEmoji('▶️')
     }
-    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀').setLabel(`Karışık Otnatma`)
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀').setLabel(`Rastgele`)
     let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji('🔄').setLabel(`Otomatik Otnatma`)
-    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`).setLabel(`Şarkı Döngüsü`)
-    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`).setLabel(`Şarkı Kuyruğu Döngüsü`)
+    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`).setLabel(`Tekrarlama`)
+    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`).setLabel(`Listesi Tekrarlama`)
     if (newQueue.autoplay) {
       autoplay = autoplay.setStyle('SECONDARY')
     }

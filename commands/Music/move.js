@@ -97,7 +97,7 @@ module.exports = {
                 if (songIndex > newQueue.songs.length - 1) return message.reply({
                     embeds: [
                         new MessageEmbed().setColor(ee.wrongcolor).setTitle(` **Bu Şarkı mevcut değil!**`)
-                        .setDescription(`**Kuyruktaki son Şarkı Dizin'e sahiptir: \`${newQueue.songs.length}\`**`)
+                        .setDescription(`**Listedeki son Şarkı Dizin'e sahiptir: \`${newQueue.songs.length}\`**`)
                     ],
 
                 })
