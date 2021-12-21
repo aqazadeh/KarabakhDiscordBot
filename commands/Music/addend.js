@@ -1,55 +1,55 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions");
 module.exports = {
-    name: "addend", //the command name for the Slash Command
+    name: "addend",
     category: "Music",
     usage: "addend",
     aliases: ["addend"],
-    description: "Adds this Song back to the end of the Queue!", //the command description for Slash Command Overview
+    description: "Mecvut Şarkıyı Sıranın sonuna ekler!",
     cooldown: 15,
-
-
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             const { member, guildId } = message;
-            const { guild } = member;
             const { channel } = member.voice;
-            if (!channel) return message.reply({
-                embeds: [
-                    new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen önce ses kanalına giriş yapın**`)
-                ],
-
-            })
+            if (!channel) {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen önce ses kanalına giriş yapın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+            }
             if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`Benim ses Kanalıma giriş yap!`)
-                        .setDescription(`<#${guild.me.voice.channel.id}>`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Benim ses Kanalıma giriş yap! Lütfen** <#${channel.guild.me.voice.channel.id}> **kanalına giriş yap!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             try {
                 let newQueue = client.distube.getQueue(guildId);
-                if (!newQueue || !newQueue.songs || newQueue.songs.length == 0) return message.reply({
-                    embeds: [
-                        new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Şu anda şarkı çalmıyorum!**`)
-                    ],
-
+                if (!newQueue || !newQueue.songs || newQueue.songs.length == 0) {
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Şuan şarkı çalmıyorum!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
+                    })
+                }
+                await client.distube.playVoiceChannel(channel, newQueue.songs[0].url).then(() => {
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `✅ **Mecvut Şarkıyı sıranın sonuna eklendi**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
+                    })
                 })
-                await client.distube.playVoiceChannel(channel, newQueue.songs[0].url)
             } catch (e) {
                 console.log(e.stack ? e.stack : e)
-                message.reply({
-                    content: ` | Hata: `,
-                    embeds: [
-                        new MessageEmbed().setColor(ee.wrongcolor)
-                        .setDescription(`\`\`\`${e}\`\`\``)
-                    ],
-
-                })
             }
         } catch (e) {
             console.log(String(e.stack).bgRed)

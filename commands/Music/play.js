@@ -1,71 +1,63 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { check_if_dj } = require("../../handlers/functions");
 module.exports = {
-    name: "play", //the command name for the Slash Command
-
+    name: "play",
     category: "Music",
-    aliases: ["p", "paly", "pley"],
+    aliases: ["p", "play"],
     usage: "play <Search/link>",
-
-    description: "Ses Kanalınızda bir Şarkı/Çalma Listesi çalar", //the command description for Slash Command Overview
+    description: "Ses Kanalınızda bir Şarkı/Çalma Listesi çalar",
     cooldown: 2,
-
-
     run: async(client, message, args) => {
         try {
-            //console.log(interaction, StringOption)
-
-            //things u can directly access in an interaction!
             const { member, channelId, guildId } = message;
             const { guild } = member;
             const { channel } = member.voice;
-            if (!channel) return message.reply({
-                embeds: [
-                    new MessageEmbed().setColor(ee.wrongcolor).setTitle(`**Lütfen önce ses kanalına giriş yapın**`)
-                ],
-
-            })
-            if (channel.userLimit != 0 && channel.full)
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ Ses Kanalın dolu. Giriş yapamıyorum`)
-                    ],
-                });
+            if (!channel) {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen önce ses kanalına giriş yapın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+            }
             if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`ℹ Baska kanalda şarkı çalıyorum yanıma gel`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Benim ses Kanalıma giriş yap! Lütfen** <#${channel.guild.me.voice.channel.id}> **kanalına giriş yap!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+            }
+            if (channel.userLimit != 0 && channel.full) {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Ses Kanalın dolu. Giriş yapamıyorum**!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             if (!args[0]) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Please add a Search Query!**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}play <Search/Link>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir Arama Sorgusu ekleyin!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
-            //let IntOption = options.getInteger("OPTIONNAME"); //same as in IntChoices //RETURNS NUMBER
-            const Text = args.join(" ") //same as in StringChoices //RETURNS STRING 
-                //update it without a response!
+            const Text = args.join(" ");
             let newmsg = await message.reply({
                 content: `🔍 Aranıyor... \`\`\`${Text}\`\`\``,
             }).catch(e => {
                 console.log(e)
             })
             try {
-                let queue = client.distube.getQueue(guildId)
+                let queue = client.distube.getQueue(guildId);
                 let options = { member: member }
                 if (!queue) options.textChannel = guild.channels.cache.get(channelId)
-                await client.distube.playVoiceChannel(channel, Text, options)
-                    //Edit the reply
+                await client.distube.playVoiceChannel(channel, Text, options);
                 newmsg.edit({
                     content: `${queue?.songs?.length > 0 ? "👍 Eklendi" : "🎶 Simdi Çalınıyor"}: \`\`\`css\n${Text}\n\`\`\``,
                 }).catch(e => {
@@ -73,14 +65,6 @@ module.exports = {
                 })
             } catch (e) {
                 console.log(e.stack ? e.stack : e)
-                message.reply({
-                    content: ` | Hata: `,
-                    embeds: [
-                        new MessageEmbed().setColor(ee.wrongcolor)
-                        .setDescription(`\`\`\`${e}\`\`\``)
-                    ],
-
-                })
             }
         } catch (e) {
             console.log(String(e.stack).bgRed)

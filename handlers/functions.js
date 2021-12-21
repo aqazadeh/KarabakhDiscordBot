@@ -1,39 +1,32 @@
-const { Collection } = require("discord.js");
+const { Collection, MessageEmbed } = require("discord.js");
 
 
 //EXPORT ALL FUNCTIONS
 module.exports.shuffle = shuffle;
-module.exports.createBar = createBar;
 module.exports.escapeRegex = escapeRegex;
 module.exports.onCoolDown = onCoolDown;
 
+module.exports.formatVariable = formatVariable;
+module.exports.applyText = applyText;
 module.exports.check_if_dj = check_if_dj;
+module.exports.rank = rank;
+module.exports.Embed = Embed;
 
-function check_if_dj(client, member, song) {
-    //if no message added return
+function check_if_dj(client, member, song, setting) {
     if (!client) return false;
-    //get the adminroles
-    var roleid = client.settings.get(member.guild.id, `djroles`)
-        //if no dj roles return false, so that it continues
-    if (String(roleid) == "") return false;
 
-    //define variables
-    var isdj = false;
+    if (member.permissions.has("ADMINISTRATOR") || song.user.id == member.id) return false;
 
-    //loop through the roles
+    var roleid = setting.get(`music`).djrole;
+
+    if (roleid.length == 0) return true;
+
     for (let i = 0; i < roleid.length; i++) {
-        //if the role does not exist, then skip this current loop run
         if (!member.guild.roles.cache.get(roleid[i])) continue;
-        //if he has role set var to true
         if (member.roles.cache.has(roleid[i])) isdj = true;
-        //add the role to the string
     }
-    //if no dj and not an admin, return the string
-    if (!isdj && !member.permissions.has("ADMINISTRATOR") && song.user.id != member.id)
-        return roleid.map(i => `<@&${i}>`).join(", ");
-    //if he is a dj or admin, then return false, which will continue the cmd
-    else
-        return false;
+    if (!isdj) return true;
+    else return false;
 }
 
 
@@ -47,6 +40,7 @@ function replacedefaultmessages(text, o = {}) {
         .replace(/{user}/gi, options && options.user ? options.user : "{user}")
         .replace(/{command}/gi, options && options.command ? options.command : "{command}")
         .replace(/{prefix}/gi, options && options.prefix ? options.prefix : "{prefix}")
+        .replace(/{autoplay}/gi, options && options.autoplay ? options.autoplay : "{autoplay}")
 
 }
 
@@ -104,31 +98,6 @@ function shuffle(array) {
     }
 }
 
-/**
- * 
- * @param {*} total Number | Time in Milliseconds
- * @param {*} current  Number | Time in Milliseconds | Current Music Position
- * @param {*} size Number | Amount of Letters in the Bar (SIZE) Default is: 25
- * @param {*} line EMOJI | the default line is: "▬"
- * @param {*} slider EMOJI | the default slider is: "🔷"
- * @returns STRING a BAR [▬▬▬▬▬🔷▬▬▬▬▬▬▬▬]
- */
-function createBar(total, current, size = 25, line = "▬", slider = "🔷") {
-    try {
-        if (!total) throw "MISSING MAX TIME";
-        if (!current) return `**[${mover}${line.repeat(size - 1)}]**`;
-        let bar = current > total ? [line.repeat(size / 2 * 2), (current / total) * 100] : [line.repeat(Math.round(size / 2 * (current / total))).replace(/.$/, slider) +
-            line.repeat(size - Math.round(size * (current / total)) + 1), current / total
-        ];
-        if (!String(bar).includes(mover)) {
-            return `**[${mover}${line.repeat(size - 1)}]**`;
-        } else {
-            return `**[${bar[0]}]**`;
-        }
-    } catch (e) {
-        console.log(String(e.stack).bgRed)
-    }
-}
 
 
 /**
@@ -142,4 +111,109 @@ function escapeRegex(str) {
     } catch (e) {
         console.log(String(e.stack).bgRed)
     }
+}
+
+/**
+ * 
+ * @param {
+ * } client 
+ * @param {*} message 
+ */
+
+async function rank(client, message, ranks) {
+
+
+    const messagePoint = Math.floor(message.content.length * 0.5);
+    const money = Number((message.content.split(/ +/).length * 0.01));
+    await client.rank.update({ points: ranks.get(`points`) + messagePoint, money: ranks.get(`money`) + money }, { where: { guild_id: message.guild.id, user_id: message.author.id } })
+
+    if (ranks.get(`points`) > ranks.get(`nextlevel`)) {
+        console.log(`level up`)
+
+        await client.rank.update({
+            nextlevel: ranks.get(`nextlevel`) + Math.floor(ranks.get(`nextlevel`) * 0.8),
+            level: ranks.get(`level`) + 1
+        }, {
+            where: {
+                guild_id: message.guild.id,
+                user_id: message.author.id
+            }
+        });
+
+
+        const curLevel = ranks.get(`level`);
+        message.channel.send({
+                    embeds: [
+                            new MessageEmbed()
+                            .setTitle(`Tebrikler: ` + message.author.username)
+                            .setTimestamp()
+                            .setDescription(`Seviye Atladiniz: **\`${curLevel}\`**! (Puan: \`${ranks.get(`points`)}\`) `)
+                                .setColor('#C219D8')
+                                .setFooter('Karabakh BOT', 'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png')
+                          ]
+              });
+          }
+
+}
+/**
+ * 
+ * @param {*} type 
+ * @param {*} authorName 
+ * @param {*} authorImg 
+ * @param {*} desc 
+ * @param {*} field 
+ * @param {*} thumb 
+ * @param {*} image 
+ * @returns 
+ */
+
+function Embed(type, authorName, authorImg, desc =""){
+    const embed = new MessageEmbed();
+    if(type == "error")
+    {
+        embed.setColor('#e01e01');
+        embed.setTitle('Hatalı İşlem!');
+    }else if(type == "success"){
+        embed.setColor('#C219D8');
+        embed.setTitle('İşlem Başarılı!');
+    }else {
+        embed.setColor('#0099ff');
+        embed.setTitle('Bilgilendirme!');
+    }
+	embed.setAuthor(authorName, authorImg);
+	embed.setDescription(desc);
+	embed.setTimestamp();
+	embed.setFooter('Karabakh BOT', 'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png');
+
+    return embed;
+}
+
+/**
+ * Gets variables and types
+ * @param {object} prefix The type of variable
+ * @param {object} variable The variable to change
+ * @returns The variable formatted
+ */
+function formatVariable(prefix, variable) {
+    const formattedVariable = variable.toLowerCase()
+        .split("-").map((word) => word.charAt(0).toUpperCase() + word.substr(1, word.length).toLowerCase()).join("");
+    return prefix + formattedVariable;
+}
+
+/**
+ * Gets variables and types
+ * @param {object} canvas The canvas
+ * @param {object} text The text
+ * @param {object} defaultFontSize The default font pixel size
+ * @param {object} width The max width of the text
+ * @param {object} font The text font
+ * @returns The variable formatted
+ */
+
+function applyText(canvas, text, defaultFontSize, width, font) {
+    const ctx = canvas.getContext("2d");
+    do {
+        ctx.font = `${(defaultFontSize -= 1)}px ${font}`;
+    } while (ctx.measureText(text).width > width);
+    return ctx.font;
 }

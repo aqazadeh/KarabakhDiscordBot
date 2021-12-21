@@ -1,49 +1,41 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
-const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "Mod", //the command name for the Slash Command
+    name: "Mod",
     category: "System",
-    usage: "ban",
+    usage: "kick <@User>",
     aliases: ["kick"],
-    description: "Bir kullaniciyi Sunucudan Atar", //the command description for Slash Command Overview
+    description: "Bir kullaniciyi Sunucudan Atar",
     cooldown: 1,
-    memberpermissions: ["KICK_MEMBERS"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+    memberpermissions: ["KICK_MEMBERS"],
 
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             const mMember = message.mentions.members.first();
             if (!mMember) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir kullanıcıyı etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}kick  <@Üye>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `**Lütfen bir kullanıcıyı etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             mMember.kick().then(() => {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Kullanıcı Sunucudan Atıldı**`)
-                    ],
+                return message.channel.send({
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `\`${mMember.tag}\` adlı kullanıcı sunucudan atıldı!`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 });
             }).catch(e => {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Kullanıcı Yetkisi Benim Yetkimden daha yuksek. Kullanıcı Atılamadı**`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `${mMember} adlı kullanıcı ,\`Sunucudan\` engellenmedi. Kullanıcı \`Rütbesi\` benim rütbemben büyük ve ya arnı rütbedeyiz!`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             })
 
         } catch (e) {

@@ -16,14 +16,16 @@ module.exports = {
 
         run: async(client, message, args) => {
                 try {
-                    let prefix = client.settings.get(message.guild.id, "prefix")
+                    let setting = await client.db.findOne({ where: { guild_id: message.guild.id } });
+                    let prefix = setting.dataValues.prefix;
                     if (args[0] && args[0].length > 0) {
                         const embed = new MessageEmbed();
                         console.log(args[0])
                         const cmd = client.commands.get(args[0].toLowerCase()) || client.commands.get(client.aliases.get(args[0].toLowerCase()));
                         if (!cmd) {
                             return message.reply({
-                                embeds: [embed.setColor(ee.wrongcolor)
+                                embeds: [
+                                    embed.setColor(ee.wrongcolor)
                                     .setDescription(replacemsg(lang.help.commandNotFound, { command: args[0].toLowerCase() }))
                                 ]
                             });
@@ -46,7 +48,7 @@ module.exports = {
                       .setColor(ee.color)
                       .setThumbnail(ee.footericon)
                       .setTitle(lang.help.title)
-                      .setDescription(`**[${lang.help.description}](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands) **`)
+                      .setDescription(`**[${lang.help.description}](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot) **`)
                       .setFooter(replacemsg(lang.help.commandFooter, { prefix }), ee.footericon);
                     const commands = (category) => {
                       return client.commands.filter((cmd) => cmd.category === category).map((cmd) => `\`${cmd.name}\``);

@@ -1,9 +1,39 @@
 //here the event starts
 const config = require("../../botconfig/config.json")
+const { settings, ranks } = require("../../handlers/database.js")
 module.exports = client => {
-    //SETTING ALL GUILD DATA FOR THE DJ ONLY COMMANDS for the DEFAULT
-    //client.guilds.cache.forEach(guild=>client.settings.set(guild.id, ["autoplay", "clearqueue", "forward", "loop", "jump", "loopqueue", "loopsong", "move", "pause", "resume", "removetrack", "removedupe", "restart", "rewind", "seek", "shuffle", "skip", "stop", "volume"], "djonlycmds"))
     try {
+        client.db = settings();
+        client.db.sync();
+        client.rank = ranks();
+        client.rank.sync();
+        client.guilds.cache.forEach(async guild => {
+            guild.members
+                .fetch()
+                .then((members) => {
+
+                    members.forEach(async(member) => {
+                        if (!member.user.bot) {
+                            const rank = await client.rank.findOne({ where: { guild_id: guild.id, user_id: member.user.id } });
+                            if (rank == null) {
+                                await client.rank.create({
+                                    guild_id: guild.id,
+                                    user_id: member.user.id,
+                                    username: member.user.username,
+                                    avatar: member.user.displayAvatarURL({ dynamic: false, format: 'png' })
+                                })
+                            }
+                        }
+                    });
+
+                });
+            const setting = await client.db.findOne({ where: { guild_id: guild.id } })
+            if (setting == null) {
+                await client.db.create({ guild_id: guild.id })
+            }
+        });
+
+
         try {
             const stringlength = 69;
             console.log("\n")

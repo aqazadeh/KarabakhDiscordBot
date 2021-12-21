@@ -1,47 +1,41 @@
-const {
-    MessageEmbed
-} = require("discord.js");
-const ee = require("../../botconfig/embed.json");
-
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "ban", //the command name for the Slash Command
+    name: "ban",
     category: "Mod",
-    usage: "ban",
+    usage: "ban <@User>",
     aliases: ["ban"],
-    description: "Bir kullaniciyi Sunucudan Engeller", //the command description for Slash Command Overview
-    cooldown: 1,
-    memberpermissions: ["BAN_MEMBERS"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-
+    description: "Bir kullaniciyi Sunucudan Engeller",
+    cooldown: 5,
+    memberpermissions: ["BAN_MEMBERS"],
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             const mMember = message.mentions.members.first();
             if (!mMember) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir kullanıcıyı etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}ban  <@Üye>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir kullanıcıyı etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             message.guild.members.ban(mMember).then(() => {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Kullanıcı Sunucudan Engellendi**`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `✅ \`${mMember.tag}\` adlı kullanıcı Sunucudan Engellendi!`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+
             }).catch(e => {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Kullanıcı Yetkisi Benim Yetkimden daha yuksek. Kullanıcı Engellenemedi**`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `❌ ${mMember} adlı kullanıcı ,\`Sunucudan\` engellenmedi. Kullanıcı \`Rütbesi\` benim rütbemben büyük ve ya arnı rütbedeyiz!`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             })
 
         } catch (e) {

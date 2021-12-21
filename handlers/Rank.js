@@ -1,23 +1,24 @@
 const Canvas = require("canvas");
-const { formatVariable, applyText } = require("../utils/functions");
+const Font = Canvas.Font;
+const { formatVariable, applyText } = require("./functions");
 
 const badges = [1, 9]; // min, max
 
 module.exports = class RankCard {
     constructor() {
-        this.backgroundImage = `${__dirname}/../assets/img/1px.png`;
-        this.avatar = `${__dirname}/../assets/img/default-avatar.png`;
+        this.backgroundImage = `${__dirname}/../assets/1px.png`;
+        this.avatar = `${__dirname}/../assets/default-avatar.png`;
         this.level = "1";
         this.rank = "10";
-        this.rankName = "rank Name";
+        this.rankName = "";
         this.reputation = "0";
         this.username = "username";
         this.xpCurrent = 8000;
         this.xpNeeded = 12000;
         this.addonReputation = true;
         this.addonRank = true;
-        this.addonRankName = true;
-        this.addonBadges = true;
+        this.addonRankName = false;
+        this.addonBadges = false;
         this.colorBackground = "#000000";
         this.colorLevelBox = "#ff7b4b";
         this.colorReputationBox = "#ff7b4b";
@@ -194,7 +195,7 @@ module.exports = class RankCard {
             ctx.fillRect(50 + 30, 30 + 180 + 30 + 50 + 30, 180, 50);
             ctx.globalAlpha = 1;
             ctx.fillStyle = this.colorReputation;
-            ctx.font = applyText(canvas, repText, 32, 170, "500");
+            ctx.font = applyText(canvas, repText, 32, 170, "Arial");
             ctx.textAlign = "center";
             ctx.fillText(repText, 50 + 30 + 180 / 2, 30 + 180 + 30 + 30 + 50 + 38);
         }

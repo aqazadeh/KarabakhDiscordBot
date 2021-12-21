@@ -1,58 +1,51 @@
-const { MessageEmbed } = require("discord.js");
-const config = require("../../botconfig/config.json");
-const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "disconnect", //the command name for the Slash Command
+    name: "disconnect",
     category: "Mod",
-    usage: "disconnect <User> <Time>",
+    usage: "disconnect <@User>",
     aliases: ["disconnect"],
-    description: "Bir Kullanıcının sesini kapatır", //the command description for Slash Command Overview
+    description: "Bir Kullanıcının sesini kapatır",
     cooldown: 1,
-    memberpermissions: ["MOVE_MEMBERS"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+    memberpermissions: ["MOVE_MEMBERS"],
 
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             let member = message.mentions.members.first()
-                // console.log(member);
-                // return
             if (!member) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Bahsedilen kullanıcı bu Kanalda bulunamadı.**`)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Bahsedilen kullanıcı bu Kanalda bulunamadı.**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
 
             if (member.voice.channelId === null) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Kullanıcı ses kanalında değil**`)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Kullanıcı ses kanalında değil**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
 
             member.voice.disconnect().then(() => {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`✅ **Üye başarıyla ses kanalindan çıkarıldı!**`)
-                        .setDescription(`**${message.member} adlı kullanıcı ${member} kullanıcısın ses kanalından çıkardı!**`)
-                    ],
-                });
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `**${message.member} adlı kullanıcı ${member} kullanıcısın ses kanalından çıkardı!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }).catch(e => {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Kullanıcı yetkisi benim yetkimden daha yüksek. Kullanıcı sesi kapatılamadı**`)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Kullanıcı yetkisi benim yetkimden daha yüksek. Kullanıcı sesi kapatılamadı**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             })
 

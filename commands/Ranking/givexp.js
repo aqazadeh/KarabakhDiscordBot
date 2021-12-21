@@ -1,85 +1,44 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions");
 module.exports = {
-    name: "givexp", //the command name for the Slash Command
+    name: "givexp",
     category: "Ranking",
     usage: "givexp",
     aliases: ["givexp"],
-    description: "Bir kullanıcıya rütbe puanı verir", //the command description for Slash Command Overview
+    description: "Bir kullanıcıya rütbe puanı verir",
     cooldown: 1,
-    memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-
-
-    run: async(client, message, args) => {
+    memberpermissions: ["MANAGE_GUILD"],
+    run: async(client, message, args, setting, rank) => {
         try {
-            //things u can directly access in an interaction!
-
-
             const user = message.mentions.users.first();
             if (!user) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **❌ Lütfen bir kullanıcıyı etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}givexp <@Üye> <Miktar>\``)
-                    ],
-                });
-            }
-            if (args[1] && !Number.isInteger(parseInt(args[1]))) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **❌ Lütfen bir say girin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}givexp <@Üye> <Miktar>\``)
-                    ],
-                });
-            }
-
-            const key = `${message.guild.id}-${user.id}`;
-            const count = parseInt(args[1]);
-            //console.log(args)
-            try {
-
-                client.points.math(key, "+", count, "points");
-                return message.reply({
-                    embeds: [
-                        new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`**✅ Başarılı\`**`)
-                        .setDescription(`**${message.member} kullanıcısı ${user} kullanıcısına ${count} seviye puanı gönderdi**`)
-                    ],
-                })
-            } catch (e) {
-                client.points.ensure(`${key}`, {
-                    user: user.id,
-                    guild: message.guild.id,
-                    username: user.username ? user.username : user.tag,
-                    avatar: user.displayAvatarURL({ dynamic: false, format: 'png' }),
-                    points: 0,
-                    level: 1,
-                    levelPoint: 200,
-                    messages: 0,
-                    money: 0,
-                    status: "Çaylak"
-
-                });
-
-                client.points.math(key, "+", count, "points");
-                return message.reply({
-                    embeds: [
-                        new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`**✅ Başarılı\`**`)
-                        .setDescription(`**${message.member} kullanıcısı ${user} kullanıcısına ${count} seviye puanı gönderdi**`)
-
-                    ],
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir kullanıcıyı etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
-
+            if (args[1] && typeof Number(args[1]) != 'number') {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir sayı girin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+            }
+            const userData = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: user.id } });
+            const count = Number(args[1]);
+            await client.rank.update({ points: userData.get(`points`) + count }, { where: { guild_id: message.member.guild.id, user_id: user.id } }).then(() => {
+                return message.channel.send({
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **${message.member} kullanıcısı ${user} kullanıcısına \`${count}\` xp gönderdi**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+            })
         } catch (e) {
             console.log(String(e.stack).bgRed)
         }

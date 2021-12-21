@@ -1,87 +1,80 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "newchannel", //the command name for the Slash Command
+    name: "createchanel",
     category: "Mod",
-    usage: "newchannel <text/voice> <isim>",
-    aliases: ["newchannel"],
-    description: "Yeni Bir Kanal Oluşturur", //the command description for Slash Command Overview
+    usage: "createchanel <text/voice> <isim>",
+    aliases: ["createchanel", "cchannel"],
+    description: "Yeni Bir Kanal Oluşturur!",
     cooldown: 1,
-    memberpermissions: ["MANAGE_GUILD"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+    memberpermissions: ["MANAGE_GUILD"],
 
     run: async(client, message, args) => {
         try {
-            console.log(args)
-                //things u can directly access in an interaction!
             if (!args) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem. Kanal oluştumak için \`text\` almak için \`voice\` kullanın**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}newchannel <text/voice> <isim>\``)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Hatalı işlem. Kanal oluştumak için \`text\` almak için \`voice\` kullanın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             const channelType = args.shift().toLowerCase();
-            if (channelType === "voice") {
+
+            if (!["text", "voice"].includes(channelType)) {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Hatalı işlem. Kanal oluştumak için \`text\` almak için \`voice\` kullanın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
+
+            }
+            if (channelType == "voice") {
                 args = args.join(" ");
 
                 message.guild.channels.create(String(args), { type: 'GUILD_VOICE' })
-                    .then(() => {
+                    .then((channel) => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.color)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`✅ **Ses kanalı oluşturma başarılı!**`)
-                                .setDescription(`**${message.member} adlı kullanıcı \`${args}\` odasını olusturdu!**`)
-                            ],
-                        });
+                            embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `**${message.member} adlı kullanıcı ${channel} kanalını olusturdu!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
+                        })
                     })
                     .catch(e => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.wrongcolor)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`❌ **Ses kanalı oluşturma Başarısız!**`)
-                            ],
+                            embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Ses kanalı oluşturma Başarısız!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
                         })
                     })
             }
-            if (channelType === "text") {
+            if (channelType == "text") {
                 args = args.join(" ");
                 message.guild.channels.create(String(args), { type: 'GUILD_TEXT' })
-                    .then(() => {
+                    .then((channel) => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.color)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`✅ **Yazı Kanal olusturma başarılı!**`)
-                                .setDescription(`**${message.member} adlı kullanıcı \`${args}\` odasını olusturdu!**`)
-                            ],
-                        });
+                            embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `**${message.member} adlı kullanıcı ${channel} mesaj kanalını olusturdu!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
+                        })
                     })
                     .catch(e => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.wrongcolor)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`❌ **Yazı kanalı oluşturma Başarısız!**`)
-                            ],
+                            embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Mesaj kanalı oluşturma Başarısız!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
                         })
                     })
-            } else {
-                return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem. Kanal oluştumak için \`text\` almak için \`voice\` kullanın**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}newchannel <text/voice> <isim>\``)
-                    ],
-                })
             }
 
         } catch (e) {

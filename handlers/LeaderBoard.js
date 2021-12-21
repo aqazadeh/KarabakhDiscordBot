@@ -5,7 +5,7 @@ const badges = [1, 9]; // min, max
 module.exports = class LeaderBoard {
     constructor() {
         this.backgroundColor = "#3E4246"
-        this.avatar = `${__dirname}/../assets/img/default-avatar.png`;
+        this.avatar = `${__dirname}/../assets/default-avatar.png`;
         this.level = "1";
         this.rank = "10";
         this.xp = 8000;
@@ -184,7 +184,7 @@ module.exports = class LeaderBoard {
 
         ctx.textAlign = 'center'
         ctx.fillStyle = this.primaryColor;
-        ctx.font = "14px Arial 500";
+        ctx.font = "14px Arial";
         ctx.fillText(this.level, 944, 45);
 
 

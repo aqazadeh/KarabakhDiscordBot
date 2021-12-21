@@ -19,7 +19,6 @@ module.exports = {
                 bannedMembersCount = bannedUsers.size;
             });
             const owner = message.guild.ownerId;
-            const category = message.guild.channels.cache.filter(ch => ch.type === 'GUILD_CATEGORY').size;
             const voiceChanel = message.guild.channels.cache.filter(ch => ch.type === 'GUILD_VOICE').size;
             const textChannel = message.guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').size;
             const embed = new MessageEmbed()

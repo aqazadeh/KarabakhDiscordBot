@@ -1,48 +1,39 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const config = require("../../botconfig/config.json");
-const ee = require("../../botconfig/embed.json");
-const settings = require("../../botconfig/settings.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "clearchat", //the command name for the Slash Command
+    name: "clearchat",
     category: "System",
     usage: "clearchat",
     aliases: ["clearchat"],
-    description: "Sohbeti Temizler", //the command description for Slash Command Overview
+    description: "Sohbeti Temizler. En fazla 99 mesaj!",
     cooldown: 1,
-    memberpermissions: ["MANAGE_MESSAGES"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+    memberpermissions: ["MANAGE_MESSAGES"],
 
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             if (args[0] && !Number.isInteger(parseInt(args[0]))) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir say girin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}clearchat  ?<@number>\``)
-                    ],
-                });
-            }
-            count = args[0] || 100;
-            if (message.author.bot) return;
-            if (count > 100)
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setDescription(`**Şu anda bir seferde en fazla 100 mesajı silebilirsiniz.**`)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `**Lütfen bir sayı girin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
 
+            }
+            count = args[0] || 99;
+            if (count > 99) count = 99;
             await message.channel.messages
                 .fetch({ limit: count })
                 .then(async messages => {
-                    // Fetches the messages
-                    await message.channel.bulkDelete(messages);
+                    await message.channel.bulkDelete(messages).then(() => {
+                        return message.channel.send({
+                            embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `\`${count}\` **Mesaj Silindi**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
+                        })
+                    })
                 })
 
         } catch (e) {

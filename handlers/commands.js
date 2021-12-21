@@ -1,7 +1,4 @@
-const {
-    readdirSync
-} = require("fs");
-console.log("Servis İşleyicisine Hoş Geldiniz".yellow);
+const { readdirSync } = require("fs");
 module.exports = (client) => {
     try {
         let amount = 0;
@@ -12,14 +9,11 @@ module.exports = (client) => {
                 if (pull.name) {
                     client.commands.set(pull.name, pull);
                     amount++;
-                } else {
-                    console.log(file, `hata -> missing a help.name, or help.name is not a string.`.brightRed);
-                    continue;
                 }
                 if (pull.aliases && Array.isArray(pull.aliases)) pull.aliases.forEach((alias) => client.aliases.set(alias, pull.name));
             }
         });
-        console.log(`${amount} Komutlar Yüklendi`.brightGreen);
+        console.log(`${amount} Komut Yüklendi`.brightGreen);
     } catch (e) {
         console.log(String(e.stack).bgRed)
     }

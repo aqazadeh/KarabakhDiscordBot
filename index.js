@@ -3,7 +3,6 @@ const config = require(`./botconfig/config.json`);
 const settings = require(`./botconfig/settings.json`);
 const filters = require(`./botconfig/filters.json`);
 const colors = require("colors");
-const Enmap = require("enmap");
 const libsodium = require("libsodium-wrappers");
 const ffmpeg = require("ffmpeg-static");
 const voice = require("@discordjs/voice");
@@ -42,20 +41,18 @@ const client = new Discord.Client({
 });
 
 
-client.points = new Enmap({ name: "points", dataDir: "./databases/points" });
-// const leveling = require("./ranking"); //load the leveling file
-// leveling(client);
+
 client.distube = new DisTube(client, {
     emitNewSongOnly: false,
     leaveOnEmpty: true,
-    leaveOnFinish: true,
-    leaveOnStop: true,
+    leaveOnFinish: false,
+    leaveOnStop: false,
     savePreviousSongs: true,
     emitAddSongWhenCreatingQueue: false,
     searchSongs: 0,
     youtubeIdentityToken: config.youtubeApiKey,
-    nsfw: true,
-    emptyCooldown: 25,
+    nsfw: false,
+    emptyCooldown: 120,
     ytdlOptions: {
         highWaterMark: 1024 * 1024 * 64,
         quality: "highestaudio",
@@ -75,11 +72,6 @@ client.categories = require("fs").readdirSync(`./commands`);
 
 client.setMaxListeners(100);
 require('events').defaultMaxListeners = 100;
-
-client.settings = new Enmap({ name: "settings", dataDir: "./databases/settings" });
-client.infos = new Enmap({ name: "infos", dataDir: "./databases/infos" });
-client.InOut = new Enmap({ name: "InOut", dataDir: "./databases/InOut" });
-client.musicForMe = new Enmap({ name: "musicForMe", dataDir: "./databases/musicforme" });
 
 ["events", "commands", settings.antiCrash ? "antiCrash" : null, "distubeEvent"]
 .filter(Boolean)

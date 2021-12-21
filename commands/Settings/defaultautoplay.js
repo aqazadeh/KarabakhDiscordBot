@@ -12,26 +12,23 @@ module.exports = {
     memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
 
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, setting) => {
         try {
             //things u can directly access in an interaction!
             const { member } = message;
             const { guild } = member;
-            client.settings.ensure(guild.id, {
-                defaultvolume: 50,
-                defaultautoplay: false,
-                defaultfilters: [`bassboost6`, `clear`]
+            const data = setting.get("music");
+            data.autoplay = !data.autoplay;
+            await client.db.update({ music: data }, { where: { guild_id: guild.id } }).then(() => {
+                return message.reply({
+                    embeds: [
+                        new MessageEmbed()
+                        .setColor(ee.color)
+                        .setFooter(ee.footertext, ee.footericon)
+                        .setTitle(`**Varsayılan Otomatik Oynat __\`${data.autoplay ? "Açık" : "Kapalı"}\`__!**`)
+                    ],
+                })
             });
-
-            client.settings.set(guild.id, !client.settings.get(guild.id, "defaultautoplay"), "defaultautoplay");
-            return message.reply({
-                embeds: [
-                    new MessageEmbed()
-                    .setColor(ee.color)
-                    .setFooter(ee.footertext, ee.footericon)
-                    .setTitle(`**Varsayılan Otomatik Oynat __\`${client.settings.get(guild.id, "defaultautoplay") ? "Açık" : "Kapalı"}\`__!**`)
-                ],
-            })
         } catch (e) {
             console.log(String(e.stack).bgRed)
         }

@@ -10,46 +10,48 @@ module.exports = {
     memberpermissions: ["MANAGE_GUILD "], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
 
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, setting) => {
         try {
             //things u can directly access in an interaction!
             const { member } = message;
             const { guild } = member;
-            if (!args[0]) {
+            if (!args[0] || Number.isInteger(args[0])) {
                 return message.reply({
                     embeds: [
                         new MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
                         .setTitle(` **Please add a Volume!**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(guild.id, "prefix")}defaultvolume <percentage>\``)
+                        .setDescription(`**Kullanımı:**\n> \`defaultvolume <percentage>\``)
                     ],
                 })
             }
             let volume = Number(args[0]);
-            client.settings.ensure(guild.id, {
-                defaultvolume: 50
-            });
-
-            if (!volume || (volume > 150 || volume < 1)) {
+            if (!volume || (volume > 200 || volume < 1)) {
                 return message.reply({
                     embeds: [
                         new MessageEmbed()
                         .setColor(ee.wrongcolor)
                         .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Ses yüksekliği \`1\` ve \`150\` arasında olmalıdır !**`)
+                        .setTitle(` **Ses yüksekliği \`1\` ve \`200\` arasında olmalıdır !**`)
                     ],
                 })
             }
-            client.settings.set(guild.id, volume, "defaultvolume");
-            return message.reply({
-                embeds: [
-                    new MessageEmbed()
-                    .setColor(ee.color)
-                    .setFooter(ee.footertext, ee.footericon)
-                    .setTitle(`**Varsayılan Ses yüksekliği olarak ayarlandı: \`${volume}\`!**`)
-                ],
-            })
+
+            const data = setting.get(`music`);
+            data.volume = volume
+
+            await client.db.update({ music: data }, { where: { guild_id: guild.id } }).then(() => {
+                return message.reply({
+                    embeds: [
+                        new MessageEmbed()
+                        .setColor(ee.color)
+                        .setFooter(ee.footertext, ee.footericon)
+                        .setTitle(`**Varsayılan Ses yüksekliği olarak ayarlandı: \`${volume}\`!**`)
+                    ],
+                })
+            });
+
         } catch (e) {
             console.log(String(e.stack).bgRed)
         }

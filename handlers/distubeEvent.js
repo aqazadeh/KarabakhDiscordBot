@@ -1,7 +1,4 @@
-console.log(`Welcome to SERVICE HANDLER /--/ By https://milrato.eu /--/ Discord: Tomato#6966`.yellow);
 const PlayerMap = new Map()
-const Discord = require(`discord.js`);
-const config = require(`../botconfig/config.json`);
 const ee = require(`../botconfig/embed.json`);
 const { MessageButton, MessageActionRow, MessageEmbed } = require(`discord.js`);
 const { check_if_dj } = require("./functions");
@@ -9,7 +6,6 @@ module.exports = (client) => {
         try {
             client.distube.on(`playSong`, async(queue, track) => {
                         client.guilds.cache.get(queue.id).me.voice.setDeaf(true).catch((e) => {})
-
                         try {
                             var newQueue = client.distube.getQueue(queue.id)
                             var newTrack = track;
@@ -29,6 +25,7 @@ module.exports = (client) => {
 
 
                             collector.on('collect', async i => {
+                                        console.log(i);
                                         if (check_if_dj(client, i.member, client.distube.getQueue(i.guild.id).songs[0])) {
                                             return i.reply({
                                                 embeds: [new MessageEmbed()
@@ -173,7 +170,7 @@ module.exports = (client) => {
                                                 })
                                             }
                                         }
-                                        //Rewind
+                                        //prev                                        
                                         if (i.customId == `4`) {
                                             let { member } = i;
                                             //get the channel instance from the Member
@@ -184,62 +181,44 @@ module.exports = (client) => {
                                                         content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
                                                         ephemeral: true
                                                     })
-                                                    //if not in the same channel as the player, return Error
-                                            if (channel.id !== newQueue.voiceChannel.id)
+                                                    //get the player instance
+                                            const queue = client.distube.getQueue(i.guild.id);
+                                            //if no player available return aka not playing anything
+                                            if (!queue || !newQueue.songs || newQueue.songs.length == 0) {
                                                 return i.reply({
-                                                    content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
+                                                    content: ` Henüz Oynanan Bir Şey Yok`,
                                                     ephemeral: true
                                                 })
-                                            let seektime = newQueue.currentTime - 10;
-                                            if (seektime < 0) seektime = 0;
-                                            if (seektime >= newQueue.songs[0].duration - newQueue.currentTime) seektime = 0;
-                                            await newQueue.seek(Number(seektime))
-                                            collector.resetTimer({ time: (newQueue.songs[0].duration - newQueue.currentTime) * 1000 })
-                                            i.reply({
-                                                embeds: [new MessageEmbed()
-                                                    .setColor(ee.color)
-                                                    .setTimestamp()
-                                                    .setTitle(`⏪ **Şarkıyı \`10 Saniye\` için geri aldı!**`)
-                                                    .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-                                                ]
-                                            })
-                                            var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
-                                            currentSongPlayMsg.edit(data).catch((e) => {
-                                                //console.log(e.stack ? String(e.stack).grey : String(e).grey)
-                                            })
-                                        }
-                                        //Forward
-                                        if (i.customId == `5`) {
-                                            let { member } = i;
-                                            //get the channel instance from the Member
-                                            const { channel } = member.voice
-                                                //if the member is not in a channel, return
-                                            if (!channel)
+                                            }
+                                            //if not in the same channel as the player, return Error
+                                            if (channel.id !== newQueue.voiceChannel.id)
                                                 return i.reply({
-                                                        content: ` **Lütfen önce bir Ses Kanalına katılın!**`,
+                                                        content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
                                                         ephemeral: true
                                                     })
-                                                    //if not in the same channel as the player, return Error
-                                            if (channel.id !== newQueue.voiceChannel.id)
-                                                return i.reply({
-                                                    content: ` **Lütfen önce __benim__ Ses Kanalıma katılın! <#${channel.id}>**`,
-                                                    ephemeral: true
-                                                })
-                                            let seektime = newQueue.currentTime + 10;
-                                            if (seektime >= newQueue.songs[0].duration) seektime = newQueue.songs[0].duration - 1;
-                                            await newQueue.seek(Number(seektime))
-                                            collector.resetTimer({ time: (newQueue.songs[0].duration - newQueue.currentTime) * 1000 })
+                                                    //if ther is nothing more to skip then stop music and leave the Channel
+                                            if (newQueue.songs.length == 0) {
+                                                //if its on autoplay mode, then do autoplay before leaving...
+                                                i.reply({
+                                                        embeds: [new MessageEmbed()
+                                                            .setColor(ee.color)
+                                                            .setTimestamp()
+                                                            .setTitle(`⏹ **Oynatmayı bıraktı ve Kanaldan ayrıldı**`)
+                                                        ]
+                                                    })
+                                                    //edit the current song message
+                                                await client.distube.stop(i.guild.id)
+                                                return
+                                            }
+                                            //skip the track
+                                            await client.distube.previous(i.guild.id)
                                             i.reply({
                                                 embeds: [new MessageEmbed()
                                                     .setColor(ee.color)
                                                     .setTimestamp()
-                                                    .setTitle(`⏩ **Şarkıyı \`10 Saniye\` için iletti!**`)
+                                                    .setTitle(`⏭ **Bir sonraki Şarkıya atlandı!**`)
                                                     .setFooter(`💢 Eylem yapan: ${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
                                                 ]
-                                            })
-                                            var data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0])
-                                            currentSongPlayMsg.edit(data).catch((e) => {
-                                                //console.log(e.stack ? String(e.stack).grey : String(e).grey)
                                             })
                                         }
                                         //Shuffle
@@ -384,27 +363,27 @@ module.exports = (client) => {
                   //console.log(e.stack ? String(e.stack).grey : String(e).grey)
                 })
               }
-              
-
-
+            
             });
           } catch (error) {
             console.error(error)
           }
     });
-    client.distube.on(`addSong`, (queue, song) => queue.textChannel.send({
-      embeds: [
-        new MessageEmbed()
-        .setColor(ee.color)
-        .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
-        .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
-          dynamic: true
-        }))
-        .setTitle(`**Şarkı listeye eklendi!**`)
-        .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
-        .addField(`🌀 **Şarkı süresi:**`, `\`${song.formattedDuration}\``)
-      ]
-    }));
+    client.distube.on(`addSong`, (queue, song) =>{ 
+      queue.textChannel.send({
+        embeds: [
+          new MessageEmbed()
+          .setColor(ee.color)
+          .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
+          .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
+            dynamic: true
+          }))
+          .setTitle(`**Şarkı listeye eklendi!**`)
+          .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
+          .addField(`🌀 **Şarkı süresi:**`, `\`${song.formattedDuration}\``)
+        ]
+      })
+    });
     client.distube.on(`addList`, (queue, playlist) => queue.textChannel.send({
       embeds: [
         new MessageEmbed()
@@ -448,17 +427,31 @@ module.exports = (client) => {
     });
     client.distube.on(`searchNoResult`, message => {
       message.channel.send(`Aradıgınız Şarkı Bulunamadı`).catch((e)=>console.log(e))
-    })
+    });
     client.distube.on(`finishSong`, (queue, song) => {
       queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
-        currentSongPlayMsg.delete().catch((e) => {
+        currentSongPlayMsg.edit({
+          embeds: [
+            new MessageEmbed()
+            .setColor(ee.color)
+            .setThumbnail(`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`)
+            .setFooter("💯 " + song.user.tag, song.user.displayAvatarURL({
+              dynamic: true
+            }))
+            .setTitle(`**Şarkı listeye eklendi!**`)
+            .setDescription(`👍 Şarkı: [\`${song.name}\`](${song.url})  -  \`${song.formattedDuration}\``)
+            .addField(`🌀 **Şarkı süresi:**`, `\`${song.formattedDuration}\``)
+          ]
+        }).catch((e) => {
           //console.log(e.stack ? String(e.stack).grey : String(e).grey)
         })
       }).catch((e) => {
         //console.log(e.stack ? String(e.stack).grey : String(e).grey)
       })
     });
-    client.distube.on(`finish`, queue => {
+    client.distube.on(`finish`, (queue) => {
+      console.log(queue.textChannel.lastMessageId);
+      console.log(PlayerMap.get(`currentmsg`));
       queue.textChannel.messages.fetch(PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg=>{
         currentSongPlayMsg.delete().catch((e) => {
           //console.log(e.stack ? String(e.stack).grey : String(e).grey)
@@ -466,26 +459,14 @@ module.exports = (client) => {
       }).catch((e) => {
         //console.log(e.stack ? String(e.stack).grey : String(e).grey)
       })
-      queue.textChannel.send({
-        embeds: [
-          new MessageEmbed().setColor(ee.color).setFooter(ee.footertext, ee.footericon)
-          .setTitle("⛔️ KANALDAN AYRILDI")
-          .setDescription(":headphones: **Başka şarkı kalmadı**")
-          .setTimestamp()
-        ]
-      })
     });
-    client.distube.on(`initQueue`, queue => {
+    client.distube.on(`initQueue`, async queue => {
       try {
-        client.settings.ensure(queue.id, {
-          defaultvolume: 50,
-          defaultautoplay: false,
-          defaultfilters: [`bassboost6`, `clear`]
-        })
-        let data = client.settings.get(queue.id)
-        queue.autoplay = Boolean(data.defaultautoplay);
-        queue.volume = Number(data.defaultvolume);
-        queue.setFilter(data.defaultfilters);
+        const setting = await client.db.findOne({ where: { guild_id: queue.id } })
+        const data = setting.get('music');
+        queue.autoplay = data.autoplay;
+        queue.volume = data.volume;
+        queue.setFilter(data.filters);
       } catch (error) {
         console.error(error)
       }
@@ -495,11 +476,6 @@ module.exports = (client) => {
   }
 
   function receiveQueueData(newQueue, newTrack) {
-    var djs = client.settings.get(newQueue.id, `djroles`);
-    if(!djs || !Array.isArray(djs)) djs = [];
-    else djs = djs.map(r => `<@&${r}>`);
-    if(djs.length == 0 ) djs = "`not setup`";
-    else djs.slice(0, 15).join(", ");
     if(!newTrack) return new MessageEmbed().setColor(ee.wrongcolor).setTitle("NO SONG FOUND?!?!")
     var embed = new MessageEmbed()
       .setColor(ee.color)
@@ -509,24 +485,22 @@ module.exports = (client) => {
       .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
       .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
       .addField(`❔ Filtreler:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 2 ? false : true)
-			.addField(`🎧 DJ Yetkisi: `, `>>> ${djs}`, client.settings.get(newQueue.id, "djroles").length > 1 ? false : true)
-      .setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
+			.setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
       .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
       .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
         dynamic: true
       }));
-    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`)
+    let prev = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏮')
+    let pause = new MessageButton().setStyle('PRIMARY').setCustomId('3').setEmoji('⏸')
     let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`⏹`)
-    let pause = new MessageButton().setStyle('SECONDARY').setCustomId('3').setEmoji('⏸')
-    let rewind = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏪').setLabel(`-10`)
-    let forward = new MessageButton().setStyle('PRIMARY').setCustomId('5').setEmoji('⏩').setLabel(`+10`)
+    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`)
     if (!newQueue.playing) {
       pause = pause.setStyle('SUCCESS').setEmoji('▶️')
     }
-    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀').setLabel(`Rastgele`)
-    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji('🔄').setLabel(`Otomatik Otnatma`)
-    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`).setLabel(`Tekrarlama`)
-    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`).setLabel(`Listesi Tekrarlama`)
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀')
+    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji('🔄')
+    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`)
+    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`)
     if (newQueue.autoplay) {
       autoplay = autoplay.setStyle('SECONDARY')
     }
@@ -542,17 +516,7 @@ module.exports = (client) => {
       songloop = songloop.setStyle('SUCCESS')
       queueloop = queueloop.setStyle('SECONDARY')
     }
-    if (Math.floor(newQueue.currentTime) < 10) {
-      rewind = rewind.setDisabled()
-    } else {
-      rewind = rewind.setDisabled(false)
-    }
-    if (Math.floor((newTrack.duration - newQueue.currentTime)) <= 10) {
-      forward = forward.setDisabled()
-    } else {
-      forward = forward.setDisabled(false)
-    }
-    const row = new MessageActionRow().addComponents([skip, stop, pause, rewind, forward]);
+    const row = new MessageActionRow().addComponents([prev, pause, stop, skip]);
     const row2 = new MessageActionRow().addComponents([ shuffle,songloop, queueloop,autoplay]);
     return {
       embeds: [embed],

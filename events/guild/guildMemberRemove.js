@@ -4,32 +4,30 @@ const ee = require("../../botconfig/embed.json");
 
 module.exports = async(client, member) => {
 
-    client.InOut.ensure(member.guild.id, {
-        jointMessage: `Sunucumuza Hoş Geldiniz {user}! Seni aramızda görmek güzel!`,
-        leaveMessage: `{user} 'ın aramızdan ayrıldığı için çok üzgünüm. Bence  onu geri çağırmalıyız! `,
-        channel: null
+    const data = await client.db.findOne({ where: { guild_id: member.guild.id } });
+    if (data.get("leave_message").enable) {
 
-    })
-    const leaveMessage = await client.InOut.get(member.guild.id, `leaveMessage`);
-    const channelID = client.InOut.get(member.guild.id, `channel`) ? client.InOut.get(member.guild.id, `channel`) : null;
+        const leaveMessage = data.get("leave_message").message;
+        const channelID = data.get("leave_message").channelID;
 
-    let channel
-    if (!channelID) {
-        channel = member.guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').first();
-        console.log(channel.id)
-    } else {
-        channel = member.guild.channels.cache.filter(ch => ch.id === channelID).first()
+
+
+        const channel = member.guild.channels.cache.filter(ch => ch.id == channelID).first();
+        if (!channel) {
+            return;
+        }
+
+        return channel.send({
+            embeds: [
+                new Discord.MessageEmbed()
+                .setTitle(`Keşke Gitmeseydi`)
+                .setDescription(replacemsg(leaveMessage, { user: member.user }))
+                .setThumbnail(member.displayAvatarURL({
+                    dynamic: true,
+                }))
+                .setFooter(ee.footertext, ee.footericon)
+                .setTimestamp()
+            ]
+        });
     }
-    return channel.send({
-        embeds: [
-            new Discord.MessageEmbed()
-            .setTitle(`Keşke Gitmeseydi`)
-            .setDescription(replacemsg(leaveMessage, { user: member.user }))
-            .setThumbnail(member.displayAvatarURL({
-                dynamic: true,
-            }))
-            .setFooter(ee.footertext, ee.footericon)
-            .setTimestamp()
-        ]
-    });
 }

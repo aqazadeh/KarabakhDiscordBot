@@ -1,117 +1,105 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "role", //the command name for the Slash Command
+    name: "role",
     category: "Mod",
     usage: "role <@Üye> <Add/Del> <@Yetki",
     aliases: ["role"],
-    description: "Bir Kullanıcıya Yetki verir veya kaldırır", //the command description for Slash Command Overview
+    description: "Bir Kullanıcıya Yetki verir veya kaldırır",
     cooldown: 1,
-    memberpermissions: ["MANAGE_ROLES"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-
+    memberpermissions: ["MANAGE_ROLES"],
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
-            console.log(args[1])
 
             const member = message.mentions.members.first();
             const role = message.mentions.roles.first();
-            console.log(role.id)
             if (!member) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Lütfen yetki vermek istediğiniz kullanıcıyı etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}role <@Üye> <add/del> <@Yetki\``)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen yetki vermek istediğiniz kullanıcıyı etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             if (!role) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Lütfen kullanıcıya vermek istediğiniz yetkiyi etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}role <@Üye> <add/del> <@Yetki\``)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen kullanıcıya vermek istediğiniz yetkiyi etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             if (!args[1]) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem. Lütfen yetki vermek için \`add\` almak için \`del\` kullanın**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}role <@Üye> <add/del> <@Yetki\``)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Hatalı işlem. Lütfen yetki vermek için \`add\` almak için \`del\` kullanın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             if (message.guild.me.roles.highest.comparePositionTo(role) <= 0) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem.**`)
-                        .setDescription(`**Rol Şu Anda Benden Yüksek Bu nedenle Kullanıcıya Eklenemiyor**`)
-                    ],
-                });
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Rol Şu Anda Benden Yüksek Bu nedenle Kullanıcıya Eklenemiyor**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
+            const roleType = args[1].toLowerCase();
+            if (!["text", "voice"].includes(roleType)) {
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen yetki vermek için \`add\` almak için \`del\` kullanın**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
 
-            if (args[1].toLowerCase() === "add") {
+            }
+            if (roleType == "add") {
                 await member.roles.add(role.id)
                     .then(() => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.color)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`✅ **Yetkilendirme Başarılı!**`)
-                                .setDescription(`**${message.member} adlı kullanıcı ${member} kullanıcısının ${role} yetkisini verdi!**`)
-                            ],
-                        });
+                            embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `**${message.member} adlı kullanıcı ${member} kullanıcısının ${role} yetkisini verdi!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
+                        })
                     })
                     .catch(e => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.wrongcolor)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`❌ **Bir Hata Olustu Muhtemelen Rol Atanamadı**`)
-                            ],
+                            embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Bir Hata Olustu Muhtemelen Rol Atanamadı**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
                         })
                     })
-            } else if (args[1].toLowerCase() === "del") {
+            }
+            if (args[1].toLowerCase() == "del") {
                 await member.roles.remove(role.id)
                     .then(() => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.color)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`✅ **Yetki Silme Başarılı!**`)
-                                .setDescription(`**${message.member} adlı kullanıcı ${member} kullanıcısının ${role} yetkisini aldı!**`)
-                            ],
+                            embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `**${message.member} adlı kullanıcı ${member} kullanıcısının ${role} yetkisini aldı!**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) });
+                            }, 5000);
                         });
                     })
                     .catch(e => {
                         return message.channel.send({
-                            embeds: [new MessageEmbed()
-                                .setColor(ee.wrongcolor)
-                                .setFooter(ee.footertext, ee.footericon)
-                                .setTitle(`❌ **Bir Hata Olustu Muhtemelen Rol Alınamadı**`)
-                            ],
+                            embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Bir Hata Olustu Muhtemelen Rol Alınamadı**`)]
+                        }).then(msg => {
+                            setTimeout(() => {
+                                msg.delete().catch((e) => { console.log(String(e).grey) })
+                            }, 5000)
                         })
                     })
-            } else {
-                return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem. Lütfen yetki vermek için \`add\` almak için \`del\` kullanın**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}role <@Üye> <add/del> <@Yetki\``)
-                    ],
-                })
             }
         } catch (e) {
             console.log(String(e.stack).bgRed)

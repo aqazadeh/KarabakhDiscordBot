@@ -1,6 +1,4 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
-const config = require("../../botconfig/config.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
     name: "prefix", //the command name for execution & for helpcmd [OPTIONAL]
     category: "Settings",
@@ -18,30 +16,26 @@ module.exports = {
             const { member } = message;
             const { guild } = member;
             if (!args[0]) {
-                return message.reply({
-                    embeds: [
-                        new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir PREFİX ekleyin!**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(guild.id, "prefix")}prefix <newPrefix>\``)
-                    ],
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir PREFİX ekleyin!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             let newPrefix = args[0];
-            client.settings.ensure(guild.id, {
-                prefix: config.prefix
-            });
 
-            client.settings.set(guild.id, newPrefix, "prefix");
-            return message.reply({
-                embeds: [
-                    new MessageEmbed()
-                    .setColor(ee.color)
-                    .setFooter(ee.footertext, ee.footericon)
-                    .setTitle(`**Yeni PREFİX şimdi: \`${newPrefix}\`**`)
-                ],
+            await client.db.update({ prefix: newPrefix }, { where: { guild_id: guild.id } }).then(() => {
+                return message.channel.send({
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Yeni PREFİX şimdi: \`${newPrefix}\`**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             })
+
         } catch (e) {
             console.log(String(e.stack).bgRed)
         }

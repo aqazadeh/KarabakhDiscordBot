@@ -1,61 +1,44 @@
-const {
-    MessageEmbed,
-    Message
-} = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "setnick", //the command name for the Slash Command
+    name: "setnick",
     category: "Mod",
     usage: "setnick <@Üye> <isim>",
     aliases: ["setnick"],
-    description: "Bir Kullanıcının Sunucu İsmini Değiştirir", //the command description for Slash Command Overview
-    cooldown: 1,
-    memberpermissions: ["MANAGE_NICKNAMES"], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
+    description: "Bir Kullanıcının Sunucu İsmini Değiştirir",
+    cooldown: 5,
+    memberpermissions: ["MANAGE_NICKNAMES"],
 
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
 
             const member = message.mentions.members.first();
 
             if (!member) {
                 return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Lütfen yetki vermek istediğiniz kullanıcıyı etiketleyin**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}setnick <@Üye> <isim>\``)
-                    ],
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `**Lütfen bir kullanıcıyı etiketleyin**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             }
             args.shift();
-            if (!args) {
-                return message.channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`❌ **Hatalı işlem. Lütfen yetki vermek için \`add\` almak için \`del\` kullanın**`)
-                        .setDescription(`**Kullanımı:**\n> \`${client.settings.get(message.guild.id, "prefix")}setnick <@Üye> <isim>\``)
-                    ],
-                })
-            }
             member.setNickname(args.join(" "))
                 .then(() => {
                     return message.channel.send({
-                        embeds: [new MessageEmbed()
-                            .setColor(ee.color)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`✅ **Üye ismi değistirme başarılı!**`)
-                            .setDescription(`**${message.member} adlı kullanıcı ${member} kullanıcısının ismini \`${args.join(" ")}\`!**`)
-                        ],
-                    });
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **${message.member} adlı kullanıcı ${member} kullanıcısının ismini \`${args.join(" ")}\`!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
+                    })
                 }).catch(e => {
                     return message.channel.send({
-                        embeds: [new MessageEmbed()
-                            .setColor(ee.wrongcolor)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`❌ **Kullanıcı Yetkisi Benim Yetkimden daha yuksek. Kullanıcı isimi değiştirilemedi.**`)
-                        ],
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Kullanıcı Yetkisi Benim Yetkimden daha yuksek. Kullanıcı isimi değiştirilemedi.**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
                     })
                 })
         } catch (e) {
