@@ -19,6 +19,14 @@ module.exports = async(client) => {
             }
         }
         await ["client", "guild"].forEach(e => load_dir(e));
+        const event_files = fs.readdirSync(`./events/distube`).filter((file) => file.endsWith(".js"));
+        for (const file of event_files) {
+            try {
+                require(`../events/distube/${file}`)(client)
+            } catch (e) {
+                console.log(e)
+            }
+        }
         console.log(`${amount} Event yüklendi`.brightGreen);
         try {
             const stringlength2 = 69;

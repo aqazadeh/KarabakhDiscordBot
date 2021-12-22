@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
 const { Embed } = require("../../handlers/functions");
 module.exports = {
     name: "grab",

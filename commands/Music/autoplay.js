@@ -50,12 +50,12 @@ module.exports = {
                         }
                         await newQueue.toggleAutoplay();
                         return message.channel.send({
-                                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `✅ **Otomatik Oyntma ${newQueue.autoplay ? `Açık` : ` Kapalı`}!**`)]
+                                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Otomatik Oyntma ${newQueue.autoplay ? `Açık` : ` Kapalı`}!**`)]
                 }).then(msg => {
                     setTimeout(() => {
-                        msg.delete().catch((e) => { console.log(String(e).grey) })
-                    }, 5000)
-                })
+                        msg.delete().catch((e) => { console.log(String(e).grey) });
+                    }, 5000);
+                });
             } catch (e) {
                 console.log(e.stack ? e.stack : e)
             }

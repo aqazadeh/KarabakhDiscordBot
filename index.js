@@ -69,14 +69,15 @@ client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.categories = require("fs").readdirSync(`./commands`);
-
+client.PlayerMap = new Map();
 client.setMaxListeners(100);
-require('events').defaultMaxListeners = 100;
+require('events').defaultMaxListeners = 120;
 
-["events", "commands", settings.antiCrash ? "antiCrash" : null, "distubeEvent"]
+["events", "commands", "antiCrash"]
 .filter(Boolean)
     .forEach(h => {
         require(`./handlers/${h}`)(client);
+        console.log(h)
     })
 
 client.login(config.token)

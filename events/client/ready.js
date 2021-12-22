@@ -1,5 +1,4 @@
 //here the event starts
-const config = require("../../botconfig/config.json")
 const { settings, ranks } = require("../../handlers/database.js")
 module.exports = client => {
     try {

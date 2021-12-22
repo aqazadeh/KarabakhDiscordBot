@@ -1,8 +1,18 @@
-const ee = require(`../../botconfig/embed.json`);
 const { onCoolDown, escapeRegex, rank, Embed } = require(`../../handlers/functions`);
-const Discord = require(`discord.js`);
 module.exports = async(client, message) => {
-    if (!message.guild || !message.channel || message.author.bot) return;
+    if (!message.guild || !message.channel || message.author.bot) {
+        if (message.content == `info`) {
+            client.guilds.cache.forEach(async guild => {
+                const channels = await guild.channels.fetch();
+                channels.forEach(async c => {
+                    if (c.type === 'GUILD_TEXT') {
+                        c.send({ embeds: [Embed("✅ Güncelleme!", message.author.tag, message.author.displayAvatarURL(), `**Bazı Hata Düzeltmeleri ve Yenilikler Eklendi! \n Bizi Seçtiğiniz İçin Teşekkürler!**\n\`Karabakh BOT\``)] }).catch((e) => { console.log(String(e).grey) })
+                    }
+                })
+            })
+        }
+        return
+    };
     if (message.channel.partial) await message.channel.fetch();
     if (message.partial) await message.fetch();
 

@@ -1,4 +1,4 @@
-const { Collection, MessageEmbed } = require("discord.js");
+const { Collection, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 
 
 //EXPORT ALL FUNCTIONS
@@ -11,6 +11,7 @@ module.exports.applyText = applyText;
 module.exports.check_if_dj = check_if_dj;
 module.exports.rank = rank;
 module.exports.Embed = Embed;
+module.exports.receiveQueueData = receiveQueueData;
 
 function check_if_dj(client, member, song, setting) {
     if (!client) return false;
@@ -178,7 +179,7 @@ function Embed(type, authorName, authorImg, desc =""){
         embed.setTitle('İşlem Başarılı!');
     }else {
         embed.setColor('#0099ff');
-        embed.setTitle('Bilgilendirme!');
+        embed.setTitle(type);
     }
 	embed.setAuthor(authorName, authorImg);
 	embed.setDescription(desc);
@@ -216,4 +217,58 @@ function applyText(canvas, text, defaultFontSize, width, font) {
         ctx.font = `${(defaultFontSize -= 1)}px ${font}`;
     } while (ctx.measureText(text).width > width);
     return ctx.font;
+}
+/**
+ * 
+ * @param {*} newQueue 
+ * @param {*} newTrack 
+ * @returns 
+ */
+function receiveQueueData(newQueue, newTrack) {
+    if(!newTrack) return new MessageEmbed().setColor(`#e01e01`).setTitle("NO SONG FOUND?!?!")
+    var embed = new MessageEmbed()
+      .setColor(`#0099ff`)
+      .addField(`💡 İsteyen`, `>>> ${newTrack.user}`, true)
+      .addField(`⏱ Süre:`, `>>> \` ${newTrack.formattedDuration}\``, true)
+      .addField(`🌀 Şarkı Listesi:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
+      .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
+      .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
+      .addField(`❔ Filtreler:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 2 ? false : true)
+			.setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
+      .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
+      .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
+        dynamic: true
+      }));
+    let prev = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏮')
+    let pause = new MessageButton().setStyle('PRIMARY').setCustomId('3').setEmoji('⏸')
+    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`⏹`)
+    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`)
+    if (!newQueue.playing) {
+      pause = pause.setStyle('SUCCESS').setEmoji('▶️')
+    }
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀')
+    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji('🔄')
+    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`)
+    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`)
+    if (newQueue.autoplay) {
+      autoplay = autoplay.setStyle('SECONDARY')
+    }
+    if (newQueue.repeatMode === 0) {
+      songloop = songloop.setStyle('SUCCESS')
+      queueloop = queueloop.setStyle('SUCCESS')
+    }
+    if (newQueue.repeatMode === 1) {
+      songloop = songloop.setStyle('SECONDARY')
+      queueloop = queueloop.setStyle('SUCCESS')
+    }
+    if (newQueue.repeatMode === 2) {
+      songloop = songloop.setStyle('SUCCESS')
+      queueloop = queueloop.setStyle('SECONDARY')
+    }
+    const row = new MessageActionRow().addComponents([prev, pause, stop, skip]);
+    const row2 = new MessageActionRow().addComponents([ shuffle,songloop, queueloop,autoplay]);
+    return {
+      embeds: [embed],
+      components: [row, row2]
+    };
 }
