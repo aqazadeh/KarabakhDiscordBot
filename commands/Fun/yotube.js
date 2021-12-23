@@ -49,7 +49,7 @@ module.exports = {
                         returnData.code = `https://discord.com/invite/${invite.code}`;
                     });
                 return message.channel.send({
-                    embeds: [Embed("Success", message.author.tag, message.author.displayAvatarURL(), `[**Youtube Çagırmak için tıkla!**](${returnData.code})`)]
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `[**Youtube Çagırmak için tıkla!**](${returnData.code})`)]
                 });;
 
 
