@@ -3,17 +3,13 @@ const lang = require("../../lang/tr.json");
 const ee = require("../../botconfig/embed.json");
 const { replacemsg } = require("../../handlers/functions.js")
 module.exports = {
-        name: "help", //the command name for execution & for helpcmd [OPTIONAL]
-
+        name: "help",
         category: "Info",
         usage: "help [cmdname]",
         aliases: ["h", "help"],
         example: ["help", "help play"],
-        cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
-        description: lang.help.generaldescription, //the command description for helpcmd [OPTIONAL]
-        memberpermissions: [], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-
-
+        cooldown: 1,
+        description: lang.help.generaldescription,
         run: async(client, message, args) => {
                 try {
                     let setting = await client.db.findOne({ where: { guild_id: message.guild.id } });

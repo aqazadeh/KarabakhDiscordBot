@@ -1,4 +1,4 @@
-const { check_if_dj } = require("../../handlers/functions");
+const { Embed } = require("../../handlers/functions");
 module.exports = {
     name: "play",
     category: "Music",

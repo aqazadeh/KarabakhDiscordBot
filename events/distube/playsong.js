@@ -2,7 +2,6 @@ const { check_if_dj, receiveQueueData, Embed } = require("../../handlers/functio
 module.exports = client => {
         try {
             client.distube.on(`playSong`, async(queue, track) => {
-
                         client.guilds.cache.get(queue.id).me.voice.setDeaf(true).catch((e) => {});
                         try {
                             const newQueue = client.distube.getQueue(queue.id);
@@ -87,7 +86,11 @@ module.exports = client => {
                                         }
                                         //stop
                                         if (i.customId == `2`) {
+
                                             await client.distube.stop(i.guild.id).then(() => {
+                                                currentSongPlayMsg.delete().catch((e) => {
+                                                    console.log(e.stack ? String(e.stack).grey : String(e).grey);
+                                                });
                                                 return queue.textChannel.send({
                                                     embeds: [Embed("success", member.user.tag, member.user.displayAvatarURL(), `⏹ **Şarkı başarılı bir şekilde durduruldu!**`)]
                                                 }).then(msg => {

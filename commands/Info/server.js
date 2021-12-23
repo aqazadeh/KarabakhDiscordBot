@@ -1,16 +1,12 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
-const lang = require("../../lang/tr.json");
+var { Embed } = require("../../handlers/functions");
 module.exports = {
-    name: "server", //the command name for the Slash Command
+    name: "server",
     category: "Info",
     usage: "server",
     aliases: ["server"],
     example: ["server"],
-    description: lang.server.generaldescription, //the command description for Slash Command Overview
+    description: "Server Bilgisini gösterir!",
     cooldown: 10,
-    memberpermissions: [], //Only allow specific Users with a Role to execute a Command [OPTIONAL]
-
     run: async(client, message, args) => {
         try {
             let bannedMembersCount;
@@ -21,17 +17,19 @@ module.exports = {
             const owner = message.guild.ownerId;
             const voiceChanel = message.guild.channels.cache.filter(ch => ch.type === 'GUILD_VOICE').size;
             const textChannel = message.guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').size;
-            const embed = new MessageEmbed()
-                .setColor(ee.color)
-                .setTitle(`${message.guild.name}`)
-                .addField(lang.server.serverID, `${message.guild.id}`, true)
-                .addField(lang.server.owner, `<@${owner}>`, true)
-                .addField(lang.server.channels, lang.server.textChannels + String(textChannel) + `\n` + lang.server.voiceChannels + String(voiceChanel), true)
-                .addField(lang.server.members, String(message.guild.memberCount), true)
-                .addField(lang.server.roles, String(message.guild.roles.cache.size), true) //a70f3e9169546b2c67d301aaeef38.gif
-                .addField(lang.server.bannedMembers, String(bannedMembersCount), true) //a70f3e9169546b2c67d301aaeef38.gif
-                .setThumbnail(message.guild.iconURL())
-                .setFooter(ee.footertext, ee.footericon);
+            const embed = Embed(
+                    message.guild.name, message.author.tag,
+                    message.author.displayAvatarURL(),
+                    `[**Benim kendi sunucuna davet etmek için tıkla!**](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot)`
+                )
+                .addField(`**🆔 Server ID**`, `${message.guild.id}`, true)
+                .addField(`**👑 Kurucu**`, `<@${owner}>`, true)
+                .addField(`**📣 Kanallar**`, `Text: ` + String(textChannel) + `\n` + `Ses: ` + String(voiceChanel), true)
+                .addField(`**🧑🏼‍🤝‍🧑🏻 Üyeler: **`, String(message.guild.memberCount), true)
+                .addField(`**🔐 Yetkiler**`, String(message.guild.roles.cache.size), true)
+                .addField(`**❌ Engellenmiş Üye**`, String(bannedMembersCount), true)
+                .setThumbnail(message.guild.iconURL());
+
             return message.channel.send({ embeds: [embed] })
         } catch (e) {
             console.log(String(e.stack).bgRed)

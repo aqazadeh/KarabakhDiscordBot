@@ -1,7 +1,7 @@
 const { onCoolDown, escapeRegex, rank, Embed } = require(`../../handlers/functions`);
 module.exports = async(client, message) => {
     if (!message.guild || !message.channel || message.author.bot) {
-        if (message.content == `info`) {
+        if (message.content == `!!info`) {
             client.guilds.cache.forEach(async guild => {
                 const channels = await guild.channels.fetch();
                 channels.forEach(async c => {
@@ -9,6 +9,15 @@ module.exports = async(client, message) => {
                         c.send({ embeds: [Embed("✅ Güncelleme!", message.author.tag, message.author.displayAvatarURL(), `**Bazı Hata Düzeltmeleri ve Yenilikler Eklendi! \n Bizi Seçtiğiniz İçin Teşekkürler!**\n\`Karabakh BOT\``)] }).catch((e) => { console.log(String(e).grey) })
                     }
                 })
+            })
+        } else if (message.content == `!!update`) {
+            client.guilds.cache.forEach(async guild => {
+                const channels = await guild.channels.fetch();
+                channels.forEach(async c => {
+                    if (c.type === 'GUILD_TEXT') {
+                        c.send({ embeds: [Embed("✅ Güncelleme Bilgisi!", message.author.tag, message.author.displayAvatarURL(), `Kısa Surelik Bota erisim olmayacak! Verdiğimiz rahatsızlıktan dolayı özür dileriz. 5 Dakikanın ardından yeniden beraberiz! İyi eğlenceler! \n **Yeni Özellik:** \`Youtube izleme\``)] }).catch((e) => { console.log(String(e).grey) })
+                    }
+                });
             })
         }
         return
