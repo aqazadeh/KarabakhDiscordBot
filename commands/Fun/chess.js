@@ -2,11 +2,11 @@ const { Embed } = require("../../handlers/functions.js");
 const fetch = require('cross-fetch');
 const together = require("../../botconfig/together.json");
 module.exports = {
-    name: "youtube",
+    name: "chess",
     category: "Fun",
-    usage: "youtube",
-    aliases: ["youtube"],
-    description: "Ses Kanalinda Youtube izlemenizi sağlar!",
+    usage: "chess",
+    aliases: ["chess"],
+    description: "Ses Kanalinda chess izlemenizi sağlar!",
     cooldown: 20,
     run: async(client, message, args, setting) => {
         const { member, channelId, guildId } = message;
@@ -31,7 +31,7 @@ module.exports = {
                         body: JSON.stringify({
                             max_age: 86400,
                             max_uses: 0,
-                            target_application_id: together.youtube,
+                            target_application_id: together.chess,
                             target_type: 2,
                             temporary: false,
                             validate: null,
@@ -48,7 +48,7 @@ module.exports = {
                         returnData.code = `https://discord.com/invite/${invite.code}`;
                     });
                 return message.channel.send({
-                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `[**Youtube Çagırmak için tıkla!**](${returnData.code})`)]
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `[**chess Çagırmak için tıkla!**](${returnData.code})`)]
                 });
 
 

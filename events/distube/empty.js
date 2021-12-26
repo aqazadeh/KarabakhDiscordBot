@@ -2,7 +2,7 @@ const { Embed } = require("../../handlers/functions");
 module.exports = client => {
     try {
         client.distube.on(`empty`, queue => {
-            queue.textChannel.messages.fetch(client.PlayerMap.get(`currentmsg`)).then(currentSongPlayMsg => {
+            queue.textChannel.messages.fetch(client.PlayerMap.get(queue.id)).then(currentSongPlayMsg => {
                 currentSongPlayMsg.delete().catch((e) => {
                     console.log(e.stack ? String(e.stack).grey : String(e).grey)
                 })

@@ -1,66 +1,56 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "dj", //the command name for execution & for helpcmd [OPTIONAL]
-
+    name: "dj",
     category: "Settings",
-    aliases: ["djrole", "role", "drole", "djs", "dj-role"],
+    aliases: ["djrole"],
     usage: "dj <add/remove> <@Role>",
-
-    cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
-    description: "Dj'leri yönetir!", //the command description for helpcmd [OPTIONAL]
-    memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-
-
+    cooldown: 1,
+    description: "Dj'leri yönetir!",
+    memberpermissions: ["MANAGE_GUILD"],
     run: async(client, message, args, setting) => {
         try {
             const data = setting.get("music");
-            //things u can directly access in an interaction!
             const { member } = message;
             const { guild } = member;
             if (!args[0]) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir __Yöntem + Yetki__ ekleyin!**`)
-                        .setDescription(`**Kullanımı:**\n> \`dj <add/remove> <@Role>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen bir eylem belirtin!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             let add_remove = args[0].toLowerCase();
             if (!["add", "remove"].includes(add_remove)) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen geçerli bir __Yöntem + Yetki__ ekleyin!**`)
-                        .setDescription(`**Kullanımı:**\n> \`dj <add/remove> <@Role>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen geçerli bir eylem belirtin!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
             let Role = message.mentions.roles.first();
             if (!Role) {
-                return message.reply({
-                    embeds: [new MessageEmbed()
-                        .setColor(ee.wrongcolor)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(` **Lütfen bir __Yöntem + Yetki__ ekleyin!**`)
-                        .setDescription(`**Kullanımı:**\n> \`dj <add/remove> <@Role>\``)
-                    ],
-                });
+                return message.channel.send({
+                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen geçerli bir yetki belirtin!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
+                })
             }
 
             if (add_remove == "add") {
 
                 if (data.djrole.includes(Role.id)) {
-                    return message.reply({
-                        embeds: [
-                            new MessageEmbed()
-                            .setColor(ee.wrongcolor)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(` **Bu Rol zaten bir DJ-ROLE!**`)
-                        ],
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Bu Yetki zaten bir DJ  yetkisi!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
                     })
                 }
 
@@ -69,25 +59,22 @@ module.exports = {
                     let djs = data.djrole.map(r => `<@&${r}>`);
                     if (djs.length == 0) djs = "`atanmadı`";
                     else djs.join(", ");
-                    return message.reply({
-                        embeds: [
-                            new MessageEmbed()
-                            .setColor(ee.color)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`**Yetki \`${Role.name}\` eklendi!**`)
-                            .addField(`🎧 **DJ Yetkileri:**`, `>>> ${djs}`, true)
-                        ],
+                    return message.channel.send({
+                        embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **DJ yetkisi \`${Role.name}\` eklendi!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
                     })
                 })
             } else {
                 if (!data.djrole.includes(Role.id)) {
-                    return message.reply({
-                        embeds: [
-                            new MessageEmbed()
-                            .setColor(ee.wrongcolor)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(` **Bu Rol henüz bir DJ Yetkisi değildir!**`)
-                        ],
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Bu Yetki zaten bir DJ yetkisi değildir!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
                     })
                 }
                 const index = data.djrole.indexOf(Role.id);
@@ -96,14 +83,12 @@ module.exports = {
                     let djs = data.djrole.map(r => `<@&${r}>`);
                     if (djs.length == 0) djs = "`atanmadı`";
                     else djs.join(", ");
-                    return message.reply({
-                        embeds: [
-                            new MessageEmbed()
-                            .setColor(ee.color)
-                            .setFooter(ee.footertext, ee.footericon)
-                            .setTitle(`**Yetki \`${Role.name}\` silindi!**`)
-                            .addField(`🎧 **DJ Yetkileri:**`, `>>> ${djs}`, true)
-                        ],
+                    return message.channel.send({
+                        embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **DJ yetkisi \`${Role.name}\` silindi!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
                     })
                 })
             }

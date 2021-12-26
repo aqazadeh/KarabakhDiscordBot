@@ -105,7 +105,6 @@ module.exports = {
                             status = data.get("welcome_message").enable = true;
                         if (args[0].toLowerCase() == 'disable')
                             status = data.get("welcome_message").enable = false;
-                        else return
                         await client.db.update({ welcome_message: data.get("welcome_message") }, { where: { guild_id: guild.id } }).then(() => {
                                     return message.channel.send({
                                                 embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Hosgeldin mesaj sistemi** \`${status ? `Açık`: `Kapalı`}\``)]

@@ -26,8 +26,32 @@ module.exports = async(client, message) => {
     if (message.partial) await message.fetch();
 
 
-    const setting = await client.db.findOne({ where: { guild_id: message.guild.id } });
-    const ranks = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: message.author.id } });
+    let setting = await client.db.findOne({ where: { guild_id: message.guild.id } });
+    if (setting == null) {
+        setting = await client.db.create({ guild_id: message.guild.id })
+    }
+    let ranks = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: message.author.id } });
+    if (ranks == null) {
+        await message.guild.members
+            .fetch()
+            .then((members) => {
+
+                members.forEach(async(member) => {
+                    if (!member.user.bot) {
+                        const rank = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: member.user.id } });
+                        if (rank == null) {
+                            ranks = await client.rank.create({
+                                guild_id: message.guild.id,
+                                user_id: member.user.id,
+                                username: member.user.username,
+                                avatar: member.user.displayAvatarURL({ dynamic: false, format: 'png' })
+                            })
+                        }
+                    }
+                });
+
+            });
+    }
 
     rank(client, message, ranks);
     const prefix = setting.get("prefix")

@@ -1,32 +1,25 @@
-const { MessageEmbed } = require("discord.js");
-const ee = require("../../botconfig/embed.json");
+const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "defaultautoplay", //the command name for execution & for helpcmd [OPTIONAL]
-
+    name: "defaultautoplay",
     category: "Settings",
     aliases: ["dautoplay"],
     usage: "defaultautoplay",
-
-    cooldown: 10, //the command cooldown for execution & for helpcmd [OPTIONAL]
-    description: "Otomatik oynatmanayı varsayılan olarak tanımlar!", //the command description for helpcmd [OPTIONAL]
-    memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-
-
+    cooldown: 10,
+    description: "Otomatik oynatmanayı varsayılan olarak tanımlar!",
+    memberpermissions: ["MANAGE_GUILD"],
     run: async(client, message, args, setting) => {
         try {
-            //things u can directly access in an interaction!
             const { member } = message;
             const { guild } = member;
             const data = setting.get("music");
             data.autoplay = !data.autoplay;
             await client.db.update({ music: data }, { where: { guild_id: guild.id } }).then(() => {
-                return message.reply({
-                    embeds: [
-                        new MessageEmbed()
-                        .setColor(ee.color)
-                        .setFooter(ee.footertext, ee.footericon)
-                        .setTitle(`**Varsayılan Otomatik Oynat __\`${data.autoplay ? "Açık" : "Kapalı"}\`__!**`)
-                    ],
+                return message.channel.send({
+                    embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Varsayılan Otomatik Oynat __\`${data.autoplay ? "Açık" : "Kapalı"}\`__!**`)]
+                }).then(msg => {
+                    setTimeout(() => {
+                        msg.delete().catch((e) => { console.log(String(e).grey) })
+                    }, 5000)
                 })
             });
         } catch (e) {

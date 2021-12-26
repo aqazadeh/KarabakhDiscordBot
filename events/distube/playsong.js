@@ -8,7 +8,7 @@ module.exports = client => {
                             const newTrack = track;
                             const data = receiveQueueData(newQueue, newTrack);
                             let currentSongPlayMsg = await queue.textChannel.send(data).then(msg => {
-                                client.PlayerMap.set(`currentmsg`, msg.id);
+                                client.PlayerMap.set(queue.id, msg.id);
                                 return msg;
                             });
                             const collector = currentSongPlayMsg.createMessageComponentCollector({

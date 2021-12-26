@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const config = require(`./botconfig/config.json`);
-const settings = require(`./botconfig/settings.json`);
 const filters = require(`./botconfig/filters.json`);
 const colors = require("colors");
 const libsodium = require("libsodium-wrappers");

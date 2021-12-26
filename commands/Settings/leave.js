@@ -101,15 +101,17 @@ module.exports = {
                                 }, 5000)
                             })
                         }
-                        let status;
                         if (args[0].toLowerCase() == 'enable')
-                            status = setting.get("leave_message").enable = true;
+                            setting.get("leave_message").enable = true;
                         if (args[0].toLowerCase() == 'disable')
-                            status = setting.get("leave_message").enable = false;
-                        else return;
-                        await client.db.update({ leave_message: setting.get("leave_message") }, { where: { guild_id: guild.id } }).then(() => {
+                            setting.get("leave_message").enable = false;
+                        await client.db.update({
+                                leave_message: setting.get("leave_message")
+                            }, {
+                                where: { guild_id: guild.id }
+                            }).then(() => {
                                     return message.channel.send({
-                                                embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Çıkış mesaj sistemi** \`${status ? `Açık`: `Kapalı`}\``)]
+                                                embeds: [Embed("success", message.author.tag, message.author.displayAvatarURL(), `✅ **Çıkış mesaj sistemi** \`${setting.get("leave_message").enable ? `Açık`: `Kapalı`}\``)]
                         }).then(msg => {
                             setTimeout(() => {
                                 msg.delete().catch((e) => { console.log(String(e).grey) })

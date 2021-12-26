@@ -1,6 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const lang = require("../../lang/tr.json");
-const ee = require("../../botconfig/embed.json");
 const { replacemsg } = require("../../handlers/functions.js")
 module.exports = {
         name: "help",
@@ -9,7 +7,7 @@ module.exports = {
         aliases: ["h", "help"],
         example: ["help", "help play"],
         cooldown: 1,
-        description: lang.help.generaldescription,
+        description: "Tüm Komutları döndürür",
         run: async(client, message, args) => {
                 try {
                     let setting = await client.db.findOne({ where: { guild_id: message.guild.id } });
@@ -21,31 +19,31 @@ module.exports = {
                         if (!cmd) {
                             return message.reply({
                                 embeds: [
-                                    embed.setColor(ee.wrongcolor)
-                                    .setDescription(replacemsg(lang.help.commandNotFound, { command: args[0].toLowerCase() }))
+                                    embed.setColor(`#e01e01`)
+                                    .setDescription(replacemsg(`**Komut için bilgi bulunamadı: ** \`{command}\``, { command: args[0].toLowerCase() }))
                                 ]
                             });
                         }
-                        if (cmd.name) embed.addField(lang.help.commandName, `\`${cmd.name}\``);
-                        if (cmd.name) embed.setTitle(replacemsg(lang.help.commandSingTitle, { command: cmd.name }));
-                        if (cmd.description) embed.addField(lang.help.commandSingleDesc, `\`${cmd.description}\``);
-                        if (cmd.aliases) embed.addField(lang.help.commandSingleAliases, `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
-                    if (cmd.cooldown) embed.addField(lang.help.commandSingleCooldown, `\`${cmd.cooldown}\``);
+                        if (cmd.name) embed.addField("**Komut ismi: **", `\`${cmd.name}\``);
+                        if (cmd.name) embed.setTitle(replacemsg(`\`{command}\`** :Komutu hakkında detaylı bilgi!**`, { command: cmd.name }));
+                        if (cmd.description) embed.addField(`**Açıklama: **`, `\`${cmd.description}\``);
+                        if (cmd.aliases) embed.addField(`**Takma adlar: **`, `\`${cmd.aliases.map((a) => `${a}`).join("`, `")}\``);
+                    if (cmd.cooldown) embed.addField(`**Bekleme Süresi: **`, `\`${cmd.cooldown}\``);
                     if (cmd.usage) {
-                      embed.addField(lang.help.commandSingleUsage, `\`${prefix}${cmd.usage}\``);
-                      embed.setFooter(lang.help.commandSingleSyntax);
+                      embed.addField(`**Kullanımı: **`, `\`${prefix}${cmd.usage}\``);
+                      embed.setFooter(`Söz dizimi: <> = gerekli, [] = isteğe bağlı`);
                     }
-                    if(cmd.example) embed.addField(lang.help.commandSingleExample, `\`${cmd.example.map((a) => `${a}`).join("`\n `")}\``);
+                    if(cmd.example) embed.addField(`**Örnek**: `, `\`${cmd.example.map((a) => `${a}`).join("`\n `")}\``);
                     return message.reply({
-                      embeds: [embed.setColor(ee.color)]
+                      embeds: [embed.setColor(`#C219D8`)]
                     });
                   } else {
                     const embed = new MessageEmbed()
-                      .setColor(ee.color)
-                      .setThumbnail(ee.footericon)
-                      .setTitle(lang.help.title)
-                      .setDescription(`**[${lang.help.description}](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot) **`)
-                      .setFooter(replacemsg(lang.help.commandFooter, { prefix }), ee.footericon);
+                      .setColor(`#C219D8`)
+                      .setThumbnail(`https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png`)
+                      .setTitle(`Yardım 🔰 Komutlar`)
+                      .setDescription(`**[Sunucuna beni davet et](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot)**`)
+                      .setFooter(replacemsg(`Komut Açıklama ve Bilgilerini görmek için şunu yazın: {prefix}help [Komut ismi]`, { prefix }), `https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png`);
                     const commands = (category) => {
                       return client.commands.filter((cmd) => cmd.category === category).map((cmd) => `\`${cmd.name}\``);
                     };
@@ -64,14 +62,6 @@ module.exports = {
                   }
       } catch (e) {
         console.log(String(e.stack).bgRed)
-        return message.reply({
-          embeds: [new MessageEmbed()
-            .setColor(ee.wrongcolor)
-            .setFooter(ee.footertext, ee.footericon)
-            .setTitle(lang.general.error)
-            .setDescription(`\`\`\`${e.message ? String(e.message).substr(0, 2000) : String(e).substr(0, 2000)}\`\`\``)
-          ]
-        });
       }
     }
 }

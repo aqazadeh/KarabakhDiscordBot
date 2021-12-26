@@ -1,18 +1,14 @@
 const { Embed } = require("../../handlers/functions.js");
 module.exports = {
-    name: "prefix", //the command name for execution & for helpcmd [OPTIONAL]
+    name: "prefix",
     category: "Settings",
     aliases: ["setprefix"],
     usage: "prefix <newPrefix>",
-    cooldown: 1, //the command cooldown for execution & for helpcmd [OPTIONAL]
-    description: "Bot PREFİX Değiştirir!", //the command description for helpcmd [OPTIONAL]
-    memberpermissions: ["MANAGE_GUILD"], //Only allow members with specific Permissions to execute a Commmand [OPTIONAL]
-
-
-
+    cooldown: 1,
+    description: "Bot PREFİX Değiştirir!",
+    memberpermissions: ["MANAGE_GUILD"],
     run: async(client, message, args) => {
         try {
-            //things u can directly access in an interaction!
             const { member } = message;
             const { guild } = member;
             if (!args[0]) {

@@ -20,7 +20,7 @@ module.exports.settings = () => {
 module.exports.ranks = () => {
     const rank = db.define('textrank', {
         guild_id: { type: DataTypes.STRING, allowNull: false },
-        user_id: { type: DataTypes.STRING, unique: true, allowNull: false },
+        user_id: { type: DataTypes.STRING, allowNull: false },
         username: { type: DataTypes.STRING },
         avatar: { type: DataTypes.STRING },
         points: { type: DataTypes.INTEGER, defaultValue: 0 },

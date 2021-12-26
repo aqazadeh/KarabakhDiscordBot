@@ -1,8 +1,19 @@
-const Discord = require(`discord.js`);
-const { replacemsg } = require(`../../handlers/functions`)
-const ee = require("../../botconfig/embed.json");
+const { replacemsg, Embed } = require(`../../handlers/functions`);
 
 module.exports = async(client, member) => {
+
+    if (!member.user.bot) {
+        const rank = await client.rank.findOne({ where: { guild_id: member.guild.id, user_id: member.user.id } });
+        if (rank != null) {
+            await client.rank.destroy({
+                where: {
+                    guild_id: member.guild.id,
+                    user_id: member.user.id
+
+                }
+            });
+        }
+    }
 
     const data = await client.db.findOne({ where: { guild_id: member.guild.id } });
     if (data.get("leave_message").enable) {
@@ -16,18 +27,8 @@ module.exports = async(client, member) => {
         if (!channel) {
             return;
         }
-
         return channel.send({
-            embeds: [
-                new Discord.MessageEmbed()
-                .setTitle(`Keşke Gitmeseydi`)
-                .setDescription(replacemsg(leaveMessage, { user: member.user }))
-                .setThumbnail(member.displayAvatarURL({
-                    dynamic: true,
-                }))
-                .setFooter(ee.footertext, ee.footericon)
-                .setTimestamp()
-            ]
+            embeds: [Embed("Bilgilendirme", message.author.tag, message.author.displayAvatarURL(), replacemsg(leaveMessage, { user: member.user })).setThumbnail(member.displayAvatarURL({ dynamic: true, }))]
         });
     }
 }
