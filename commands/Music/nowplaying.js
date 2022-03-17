@@ -12,24 +12,8 @@ module.exports = {
             const { member, guildId } = message;
             const { guild } = member;
             const { channel } = member.voice;
-            if (!channel) {
-                return message.channel.send({
-                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen önce ses kanalına giriş yapın**`)]
-                }).then(msg => {
-                    setTimeout(() => {
-                        msg.delete().catch((e) => { console.log(String(e).grey) })
-                    }, 5000)
-                })
-            }
-            if (channel.guild.me.voice.channel && channel.guild.me.voice.channel.id != channel.id) {
-                return message.channel.send({
-                    embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Benim ses Kanalıma giriş yap! Lütfen** <#${channel.guild.me.voice.channel.id}> **kanalına giriş yap!**`)]
-                }).then(msg => {
-                    setTimeout(() => {
-                        msg.delete().catch((e) => { console.log(String(e).grey) })
-                    }, 5000)
-                })
-            }
+
+ 
             try {
                 let newQueue = client.distube.getQueue(guildId);
                 if (!newQueue || !newQueue.songs || newQueue.songs.length == 0) {
@@ -54,9 +38,8 @@ module.exports = {
                         .addField(`:thumbsup: Beğenenler:`, `>>> \`${newTrack.likes}\``, true)
                         .addField(`:thumbsdown: Beğenmeyenler:`, `>>> \`${newTrack.dislikes}\``, true)
                         .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
-                        .setFooter(`Şarkı İsteyen: ${guild.name}`, guild.iconURL({
-                            dynamic: true
-                        })).setTimestamp()
+                        .setFooter({text: `Şarkı İsteyen: ${guild.name}`, iconURL: guild.iconURL({dynamic: true})})
+                        .setTimestamp()
                     ]
                 }).catch((e) => {
                     onsole.log(e.stack ? e.stack : e)

@@ -31,7 +31,7 @@ module.exports = {
                     if (cmd.cooldown) embed.addField(`**Bekleme Süresi: **`, `\`${cmd.cooldown}\``);
                     if (cmd.usage) {
                       embed.addField(`**Kullanımı: **`, `\`${prefix}${cmd.usage}\``);
-                      embed.setFooter(`Söz dizimi: <> = gerekli, [] = isteğe bağlı`);
+                      embed.setFooter({text: `Söz dizimi: <> = gerekli, [] = isteğe bağlı`});
                     }
                     if(cmd.example) embed.addField(`**Örnek**: `, `\`${cmd.example.map((a) => `${a}`).join("`\n `")}\``);
                     return message.reply({

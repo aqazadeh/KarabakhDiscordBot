@@ -1,27 +1,5 @@
 const { onCoolDown, escapeRegex, rank, Embed } = require(`../../handlers/functions`);
 module.exports = async(client, message) => {
-    if (!message.guild || !message.channel || message.author.bot) {
-        if (message.content == `!!updated`) {
-            client.guilds.cache.forEach(async guild => {
-                const channels = await guild.channels.fetch();
-                channels.forEach(async c => {
-                    if (c.type === 'GUILD_TEXT') {
-                        c.send({ embeds: [Embed("✅ Güncelleme!", message.author.tag, message.author.displayAvatarURL(), `**Bazı Hata Düzeltmeleri ve Yenilikler Eklendi! \n Bizi Seçtiğiniz İçin Teşekkürler!**\n\`Karabakh BOT\` \n **Yeni Özellik:** \`Youtube izleme\``)] }).catch((e) => { console.log(String(e).grey) })
-                    }
-                })
-            })
-        } else if (message.content == `!!update`) {
-            client.guilds.cache.forEach(async guild => {
-                const channels = await guild.channels.fetch();
-                channels.forEach(async c => {
-                    if (c.type === 'GUILD_TEXT') {
-                        c.send({ embeds: [Embed("✅ Güncelleme Bilgisi!", message.author.tag, message.author.displayAvatarURL(), `Kısa Surelik Bota erisim olmayacak! Verdiğimiz rahatsızlıktan dolayı özür dileriz. 5 Dakikanın ardından yeniden beraberiz! İyi eğlenceler!`)] }).catch((e) => { console.log(String(e).grey) })
-                    }
-                });
-            })
-        }
-        return
-    };
     if (message.channel.partial) await message.channel.fetch();
     if (message.partial) await message.fetch();
 
@@ -83,6 +61,26 @@ module.exports = async(client, message) => {
                         msg.delete().catch((e) => { console.log(String(e).grey) })
                     }, 5000)
                 })
+            }
+            if(command.category == 'Music'){
+                if (!message.member.voice.channel) {
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Lütfen önce ses kanalına giriş yapın**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
+                    })
+                }
+                if (message.member.voice.channel.guild.me.voice.channel && message.member.voice.channel.guild.me.voice.channel.id != message.member.voice.channel.id) {
+                    return message.channel.send({
+                        embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Benim ses Kanalıma giriş yap! Lütfen** <#${message.member.voice.channel.guild.me.voice.channel.id}> **kanalına giriş yap!**`)]
+                    }).then(msg => {
+                        setTimeout(() => {
+                            msg.delete().catch((e) => { console.log(String(e).grey) })
+                        }, 5000)
+                    })
+                }
             }
             command.run(client, message, args, setting, ranks);
         } catch (error) {

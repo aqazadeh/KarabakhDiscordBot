@@ -119,6 +119,7 @@ function escapeRegex(str) {
  * @param {
  * } client 
  * @param {*} message 
+ * @param {*} ranks
  */
 
 async function rank(client, message, ranks) {
@@ -150,7 +151,7 @@ async function rank(client, message, ranks) {
                             .setTimestamp()
                             .setDescription(`Seviye Atladiniz: **\`${curLevel}\`**! (Puan: \`${ranks.get(`points`)}\`) `)
                                 .setColor('#C219D8')
-                                .setFooter('Karabakh BOT', 'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png')
+                                .setFooter({text: 'Karabakh BOT', iconURL:'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png'})
                           ]
               });
           }
@@ -181,10 +182,10 @@ function Embed(type, authorName, authorImg, desc =""){
         embed.setColor('#0099ff');
         embed.setTitle(type);
     }
-	embed.setAuthor(authorName, authorImg);
+	embed.setAuthor({ name: authorName, iconURL: authorImg});
 	embed.setDescription(desc);
 	embed.setTimestamp();
-	embed.setFooter('Karabakh BOT', 'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png');
+	embed.setFooter({text: 'Karabakh BOT', iconURL:'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png'});
 
     return embed;
 }
@@ -234,11 +235,9 @@ function receiveQueueData(newQueue, newTrack) {
       .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
       .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
       .addField(`❔ Filtreler:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 2 ? false : true)
-			.setAuthor(`${newTrack.name}`, `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, newTrack.url)
+	  .setAuthor({nane: `${newTrack.name}`, iconURL: `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, url: newTrack.url})
       .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
-      .setFooter(`💯 ${newTrack.user.tag}`, newTrack.user.displayAvatarURL({
-        dynamic: true
-      }));
+      .setFooter({text: `💯 ${newTrack.user.tag}`, iconURL: newTrack.user.displayAvatarURL({dynamic: true})});
     let prev = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏮')
     let pause = new MessageButton().setStyle('PRIMARY').setCustomId('3').setEmoji('⏸')
     let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`⏹`)
