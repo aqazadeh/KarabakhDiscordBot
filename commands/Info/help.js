@@ -8,7 +8,7 @@ module.exports = {
         example: ["help", "help play"],
         cooldown: 1,
         description: "Tüm Komutları döndürür",
-        run: async(client, message, args) => {
+        run: async(client, message, args, settings) => {
                 try {
                     let setting = await client.db.findOne({ where: { guild_id: message.guild.id } });
                     let prefix = setting.dataValues.prefix;

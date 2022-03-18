@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 1,
     memberpermissions: ["MANAGE_GUILD"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             if (!args) {
                 return message.channel.send({

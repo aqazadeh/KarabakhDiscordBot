@@ -6,7 +6,7 @@ module.exports = {
     usage: "play <Search/link>",
     description: "Ses Kanalınızda bir Şarkı/Çalma Listesi çalar",
     cooldown: 2,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const { member, channelId, guildId } = message;
             const { guild } = member;

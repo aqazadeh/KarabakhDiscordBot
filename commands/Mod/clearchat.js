@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 1,
     memberpermissions: ["MANAGE_MESSAGES"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             if (args[0] && !Number.isInteger(parseInt(args[0]))) {
                 return message.channel.send({

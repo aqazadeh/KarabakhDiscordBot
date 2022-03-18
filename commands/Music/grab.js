@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["grab"],
     description: "Jumps to a specific Position in the Song",
     cooldown: 10,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const { member, guildId } = message;
             const { guild } = member;

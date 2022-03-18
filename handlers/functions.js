@@ -8,11 +8,11 @@ module.exports.onCoolDown = onCoolDown;
 
 module.exports.formatVariable = formatVariable;
 module.exports.applyText = applyText;
-module.exports.check_if_dj = check_if_dj;
+module.exports.check_if_not_dj = check_if_not_dj;
 module.exports.Embed = Embed;
 module.exports.receiveQueueData = receiveQueueData;
 
-function check_if_dj(client, member, song, setting) {
+function check_if_not_dj(client, member, song, setting) {
     if (!client) return false;
 
     if (member.permissions.has("ADMINISTRATOR") || song.user.id == member.id) return false;
@@ -23,10 +23,9 @@ function check_if_dj(client, member, song, setting) {
 
     for (let i = 0; i < roleid.length; i++) {
         if (!member.guild.roles.cache.get(roleid[i])) continue;
-        if (member.roles.cache.has(roleid[i])) isdj = true;
+        if (member.roles.cache.has(roleid[i])) return false;
     }
-    if (!isdj) return true;
-    else return false;
+    return true;
 }
 
 
@@ -193,17 +192,17 @@ function receiveQueueData(newQueue, newTrack) {
 	  .setAuthor({name: `${newTrack.name}`, iconURL: `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, url: newTrack.url})
       .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
       .setFooter({text: `💯 ${newTrack.user.tag}`, iconURL: newTrack.user.displayAvatarURL({dynamic: true})});
-    let prev = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏮')
-    let pause = new MessageButton().setStyle('PRIMARY').setCustomId('3').setEmoji('⏸')
-    let stop = new MessageButton().setStyle('DANGER').setCustomId('2').setEmoji(`⏹`)
-    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('1').setEmoji(`⏭`)
+    let prev = new MessageButton().setStyle('PRIMARY').setCustomId('prev').setEmoji('⏮')
+    let pause = new MessageButton().setStyle('PRIMARY').setCustomId('pause').setEmoji('⏸')
+    let stop = new MessageButton().setStyle('DANGER').setCustomId('stop').setEmoji(`⏹`)
+    let skip = new MessageButton().setStyle('PRIMARY').setCustomId('skip').setEmoji(`⏭`)
     if (!newQueue.playing) {
       pause = pause.setStyle('SUCCESS').setEmoji('▶️')
     }
-    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('6').setEmoji('🔀')
-    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('7').setEmoji('🔄')
-    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('8').setEmoji(`🔁`)
-    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('9').setEmoji(`🔂`)
+    let shuffle = new MessageButton().setStyle('PRIMARY').setCustomId('shuffle').setEmoji('🔀')
+    let autoplay = new MessageButton().setStyle('SUCCESS').setCustomId('autoplay').setEmoji('🔄')
+    let songloop = new MessageButton().setStyle('SUCCESS').setCustomId('songloop').setEmoji(`🔁`)
+    let queueloop = new MessageButton().setStyle('SUCCESS').setCustomId('queueloop').setEmoji(`🔂`)
     if (newQueue.autoplay) {
       autoplay = autoplay.setStyle('SECONDARY')
     }

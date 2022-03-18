@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["nowplaying"],
     description: "Geçerli Çalmakta olan Şarkıyı gösterir",
     cooldown: 5,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const { member, guildId } = message;
             const { guild } = member;

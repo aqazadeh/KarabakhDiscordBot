@@ -7,7 +7,7 @@ module.exports = {
     example: ["server"],
     description: "Server Bilgisini gösterir!",
     cooldown: 10,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             let bannedMembersCount;
             await message.guild.bans.fetch().then((bannedUsers) => {

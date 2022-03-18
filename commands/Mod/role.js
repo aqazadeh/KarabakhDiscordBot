@@ -7,7 +7,7 @@ module.exports = {
     description: "Bir Kullanıcıya Yetki verir veya kaldırır",
     cooldown: 1,
     memberpermissions: ["MANAGE_ROLES"],
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
 
             const member = message.mentions.members.first();

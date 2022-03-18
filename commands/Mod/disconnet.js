@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 1,
     memberpermissions: ["MOVE_MEMBERS"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             let member = message.mentions.members.first()
             if (!member) {

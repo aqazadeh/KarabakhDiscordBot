@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["avatar"],
     description: "Bir kullaniciyi Sunucudan Engeller",
     cooldown: 1,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const mMember = message.mentions.members.first() || message.author;
             return message.channel.send({

@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 5,
     memberpermissions: ["MANAGE_NICKNAMES"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
 
             const member = message.mentions.members.first();

@@ -1,4 +1,4 @@
-const { check_if_dj, Embed } = require("../../handlers/functions");
+const { check_if_not_dj, Embed } = require("../../handlers/functions");
 module.exports = {
     name: "rewind",
     category: "Music",
@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["rwd"],
     description: "X Saniye için Geri Sarma",
     cooldown: 10,
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const { member, guildId } = message;
             const { guild } = member;
@@ -33,7 +33,7 @@ module.exports = {
                         }, 5000)
                     })
                 }
-                if (check_if_dj(client, member, newQueue.songs[0])) {
+                if (check_if_not_dj(client, member, newQueue.songs[0], settings)) {
                     return message.channel.send({
                         embeds: [Embed("error", message.author.tag, message.author.displayAvatarURL(), `❌ **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)]
                     }).then(msg => {

@@ -1,9 +1,10 @@
-const { check_if_dj, receiveQueueData, Embed } = require("../../handlers/functions");
+const { check_if_not_dj, receiveQueueData, Embed } = require("../../handlers/functions");
 module.exports = client => {
         try {
             client.distube.on(`playSong`, async(queue, track) => {
                         client.guilds.cache.get(queue.id).me.voice.setDeaf(true).catch((e) => {});
                         try {
+
                             const newQueue = client.distube.getQueue(queue.id);
                             const newTrack = track;
                             const data = receiveQueueData(newQueue, newTrack);
@@ -15,10 +16,17 @@ module.exports = client => {
                                 filter: (i) => i.isButton() && i.user && i.message.author.id == client.user.id,
                                 time: track.duration > 0 ? track.duration * 1000 : 600000
                             });
-                            let lastEdited = false;
                             collector.on('collect', async i => {
-                                        if (check_if_dj(client, i.member, client.distube.getQueue(i.guild.id).songs[0])) {
-                                            return message.channel.send({
+
+                                const { member } = i;
+                                const { channel } = member.voice;
+
+                                let setting = await client.db.findOne({ where: { guild_id: i.guild.id } });
+                                if (setting == null) {
+                                    setting = await client.db.create({ guild_id: i.guild.id})
+                                }
+                                        if (check_if_not_dj(client, member, client.distube.getQueue(i.guild.id).songs[0], setting)) {
+                                            return i.message.channel.send({
                                                 embeds: [Embed("error", member.user.tag, member.user.displayAvatarURL(), `❌ **Siz bir DJ veya Şarkı İsteyen değilsiniz!**`)]
                                             }).then(msg => {
                                                 setTimeout(() => {
@@ -26,13 +34,6 @@ module.exports = client => {
                                                 }, 5000);
                                             })
                                         }
-                                        lastEdited = true;
-                                        setTimeout(() => {
-                                            lastEdited = false;
-                                        }, 7000);
-
-                                        let { member } = i;
-                                        const { channel } = member.voice;
                                         if (!channel) {
                                             return queue.textChannel.send({
                                                 embeds: [Embed("error", member.user.tag, member.user.displayAvatarURL(), `❌ **Lütfen önce ses kanalına giriş yapın**`)]
@@ -63,7 +64,7 @@ module.exports = client => {
                                         }
 
                                         //skip
-                                        if (i.customId == `1`) {
+                                        if (i.customId == `skip`) {
                                             await client.distube.skip(i.guild.id)
                                                 .then(() => {
                                                     return queue.textChannel.send({
@@ -85,7 +86,7 @@ module.exports = client => {
                                                 })
                                         }
                                         //stop
-                                        if (i.customId == `2`) {
+                                        if (i.customId == `stop`) {
 
                                             await client.distube.stop(i.guild.id).then(() => {
                                                 currentSongPlayMsg.delete().catch((e) => {
@@ -101,7 +102,7 @@ module.exports = client => {
                                             });
                                         }
                                         //pause/resume
-                                        if (i.customId == `3`) {
+                                        if (i.customId == `pause`) {
                                             if (newQueue.playing) {
                                                 await client.distube.pause(i.guild.id);
                                                 const data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0]);
@@ -132,7 +133,7 @@ module.exports = client => {
                                             }
                                         }
                                         //prev                                        
-                                        if (i.customId == `4`) {
+                                        if (i.customId == `prev`) {
                                             await client.distube.previous(i.guild.id)
                                                 .then(() => {
                                                     return queue.textChannel.send({
@@ -154,7 +155,7 @@ module.exports = client => {
                                                 });
                                         }
                                         //Shuffle
-                                        if (i.customId == `6`) {
+                                        if (i.customId == `shuffle`) {
                                             await newQueue.shuffle().then(() => {
                                                 return queue.textChannel.send({
                                                     embeds: [Embed("success", member.user.tag, member.user.displayAvatarURL(), `🔀 **Şarkı sıralaması karıştırıldı!`)]
@@ -166,7 +167,7 @@ module.exports = client => {
                                             });
                                         }
                                         //autoplay
-                                        if (i.customId == `7`) {
+                                        if (i.customId == `autoplay`) {
                                             await newQueue.toggleAutoplay();
                                             const data = receiveQueueData(client.distube.getQueue(queue.id), newQueue.songs[0]);
                                             currentSongPlayMsg.edit(data).catch((e) => {
@@ -181,7 +182,7 @@ module.exports = client => {
                                 });
                             }
                             //Songloop
-                            if(i.customId == `8`){
+                            if(i.customId == `songloop`){
                                 if(newQueue.repeatMode == 1){
                                     await newQueue.setRepeatMode(0);
                                 } 
@@ -202,7 +203,7 @@ module.exports = client => {
                                 });
                             }
                             //Queueloop
-                            if(i.customId == `9`){
+                            if(i.customId == `queueloop`){
                                 if(newQueue.repeatMode == 2){
                                     await newQueue.setRepeatMode(0);
                                 } 

@@ -7,7 +7,7 @@ module.exports = {
     description: "Bir kullaniciyi Sunucudan Engeller",
     cooldown: 5,
     memberpermissions: ["BAN_MEMBERS"],
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const mMember = message.mentions.members.first();
             if (!mMember) {

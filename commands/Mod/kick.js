@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 1,
     memberpermissions: ["KICK_MEMBERS"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const mMember = message.mentions.members.first();
             if (!mMember) {

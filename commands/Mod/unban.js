@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 5,
     memberpermissions: ["BAN_MEMBERS"],
 
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const mMember = args[0];
             if (!mMember == undefined) {

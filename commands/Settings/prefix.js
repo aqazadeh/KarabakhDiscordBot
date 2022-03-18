@@ -7,7 +7,7 @@ module.exports = {
     cooldown: 1,
     description: "Bot PREFİX Değiştirir!",
     memberpermissions: ["MANAGE_GUILD"],
-    run: async(client, message, args) => {
+    run: async(client, message, args, settings) => {
         try {
             const { member } = message;
             const { guild } = member;
