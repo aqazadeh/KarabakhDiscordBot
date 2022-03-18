@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const config = require(`./botconfig/config.json`);
-const filters = require(`./botconfig/filters.json`);
 const colors = require("colors");
 const libsodium = require("libsodium-wrappers");
 const ffmpeg = require("ffmpeg-static");
 const voice = require("@discordjs/voice");
 const DisTube = require("distube").default;
+const { YtDlpPlugin } = require('@distube/yt-dlp')
 const client = new Discord.Client({
     shards: "auto",
     allowedMentions: {
@@ -30,13 +30,6 @@ const client = new Discord.Client({
         Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
         Discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING
     ],
-    presence: {
-        activity: {
-            name: `+help | musicium.eu`,
-            type: "PLAYING",
-        },
-        status: "online"
-    }
 });
 
 
@@ -50,18 +43,11 @@ client.distube = new DisTube(client, {
     emitAddSongWhenCreatingQueue: false,
     searchSongs: 0,
     youtubeIdentityToken: config.youtubeApiKey,
-    nsfw: false,
     emptyCooldown: 120,
-    ytdlOptions: {
-        highWaterMark: 1024 * 1024 * 64,
-        quality: "highestaudio",
-        format: "audioonly",
-        liveBuffer: 60000,
-        dlChunkSize: 1024 * 1024 * 64,
-    },
-    youtubeDL: true,
-    updateYouTubeDL: true,
-    customFilters: filters
+    plugins: [
+        new YtDlpPlugin()
+      ],
+    youtubeDL: false,
 })
 
 client.commands = new Discord.Collection();
@@ -76,7 +62,6 @@ require('events').defaultMaxListeners = 120;
 .filter(Boolean)
     .forEach(h => {
         require(`./handlers/${h}`)(client);
-        console.log(h)
     })
 
 client.login(config.token)

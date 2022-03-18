@@ -2,10 +2,6 @@
     "name": "karabakh-bot-discord-v2",
     "version": "2.0.0",
     "description": "",
-    "engines": {
-        "npm": "6.x",
-        "node": "16.x"
-    },
     "main": "index.js",
     "scripts": {
         "start": "node index.js"
@@ -13,12 +9,13 @@
     "dependencies": {
         "@discordjs/builders": "^0.6.0",
         "@discordjs/opus": "^0.7.0",
-        "@discordjs/voice": "^0.6.0",
+        "@discordjs/voice": "^0.8.0",
+        "@distube/yt-dlp": "^0.0.2",
         "canvas": "^2.8.0",
         "colors": "^1.4.0",
         "cross-fetch": "^3.1.4",
-        "discord.js": "^13.1.0",
-        "distube": "^3.0.3",
+        "discord.js": "^13.6.0",
+        "distube": "^3.3.1",
         "ffmpeg-static": "^4.4.0",
         "libsodium-wrappers": "^0.7.9",
         "node-fetch": "^3.1.0",

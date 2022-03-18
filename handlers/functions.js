@@ -9,7 +9,6 @@ module.exports.onCoolDown = onCoolDown;
 module.exports.formatVariable = formatVariable;
 module.exports.applyText = applyText;
 module.exports.check_if_dj = check_if_dj;
-module.exports.rank = rank;
 module.exports.Embed = Embed;
 module.exports.receiveQueueData = receiveQueueData;
 
@@ -116,49 +115,6 @@ function escapeRegex(str) {
 
 /**
  * 
- * @param {
- * } client 
- * @param {*} message 
- * @param {*} ranks
- */
-
-async function rank(client, message, ranks) {
-
-
-    const messagePoint = Math.floor(message.content.length * 0.5);
-    const money = Number((message.content.split(/ +/).length * 0.01));
-    await client.rank.update({ points: ranks.get(`points`) + messagePoint, money: ranks.get(`money`) + money }, { where: { guild_id: message.guild.id, user_id: message.author.id } })
-
-    if (ranks.get(`points`) > ranks.get(`nextlevel`)) {
-        console.log(`level up`)
-
-        await client.rank.update({
-            nextlevel: ranks.get(`nextlevel`) + Math.floor(ranks.get(`nextlevel`) * 0.8),
-            level: ranks.get(`level`) + 1
-        }, {
-            where: {
-                guild_id: message.guild.id,
-                user_id: message.author.id
-            }
-        });
-
-
-        const curLevel = ranks.get(`level`);
-        message.channel.send({
-                    embeds: [
-                            new MessageEmbed()
-                            .setTitle(`Tebrikler: ` + message.author.username)
-                            .setTimestamp()
-                            .setDescription(`Seviye Atladiniz: **\`${curLevel}\`**! (Puan: \`${ranks.get(`points`)}\`) `)
-                                .setColor('#C219D8')
-                                .setFooter({text: 'Karabakh BOT', iconURL:'https://cdn.discordapp.com/avatars/914294751551954974/1e03a99854f09776b06acda84679e849.png'})
-                          ]
-              });
-          }
-
-}
-/**
- * 
  * @param {*} type 
  * @param {*} authorName 
  * @param {*} authorImg 
@@ -234,8 +190,7 @@ function receiveQueueData(newQueue, newTrack) {
       .addField(`🌀 Şarkı Listesi:`, `>>> \`${newQueue.songs.length} şarkı\`\n\`${newQueue.formattedDuration}\``, true)
       .addField(`🔊 Ses Seviyesi:`, `>>> \`${newQueue.volume} %\``, true)
       .addField(`❔ Şarkıyı indir:`, `>>> [\`Buraya Tıkla\`](${newTrack.streamURL})`, true)
-      .addField(`❔ Filtreler:`, `>>> ${newQueue.filters && newQueue.filters.length > 0 ? `${newQueue.filters.map(f=>`\`${f}\``).join(`, `)}` : ``}`, newQueue.filters.length > 2 ? false : true)
-	  .setAuthor({nane: `${newTrack.name}`, iconURL: `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, url: newTrack.url})
+	  .setAuthor({name: `${newTrack.name}`, iconURL: `https://images-ext-1.discordapp.net/external/DkPCBVBHBDJC8xHHCF2G7-rJXnTwj_qs78udThL8Cy0/%3Fv%3D1/https/cdn.discordapp.com/emojis/859459305152708630.gif`, url: newTrack.url})
       .setThumbnail(`https://img.youtube.com/vi/${newTrack.id}/mqdefault.jpg`)
       .setFooter({text: `💯 ${newTrack.user.tag}`, iconURL: newTrack.user.displayAvatarURL({dynamic: true})});
     let prev = new MessageButton().setStyle('PRIMARY').setCustomId('4').setEmoji('⏮')

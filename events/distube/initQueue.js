@@ -7,7 +7,6 @@ module.exports = client => {
                 const data = setting.get('music');
                 queue.autoplay = data.autoplay;
                 queue.volume = data.volume;
-                queue.setFilter(data.filters);
             } catch (error) {
                 console.error(error)
             }

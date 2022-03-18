@@ -1,4 +1,4 @@
-const { onCoolDown, escapeRegex, rank, Embed } = require(`../../handlers/functions`);
+const { onCoolDown, escapeRegex, Embed } = require(`../../handlers/functions`);
 module.exports = async(client, message) => {
     if (message.channel.partial) await message.channel.fetch();
     if (message.partial) await message.fetch();
@@ -8,30 +8,7 @@ module.exports = async(client, message) => {
     if (setting == null) {
         setting = await client.db.create({ guild_id: message.guild.id })
     }
-    let ranks = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: message.author.id } });
-    if (ranks == null) {
-        await message.guild.members
-            .fetch()
-            .then((members) => {
 
-                members.forEach(async(member) => {
-                    if (!member.user.bot) {
-                        const rank = await client.rank.findOne({ where: { guild_id: message.guild.id, user_id: member.user.id } });
-                        if (rank == null) {
-                            ranks = await client.rank.create({
-                                guild_id: message.guild.id,
-                                user_id: member.user.id,
-                                username: member.user.username,
-                                avatar: member.user.displayAvatarURL({ dynamic: false, format: 'png' })
-                            })
-                        }
-                    }
-                });
-
-            });
-    }
-
-    rank(client, message, ranks);
     const prefix = setting.get("prefix")
     const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})`);
     if (!prefixRegex.test(message.content)) return;
@@ -82,7 +59,7 @@ module.exports = async(client, message) => {
                     })
                 }
             }
-            command.run(client, message, args, setting, ranks);
+            command.run(client, message, args, setting);
         } catch (error) {
             console.log(String(error).grey)
         }
